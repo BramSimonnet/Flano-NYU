@@ -62,13 +62,7 @@ export default function Home() {
       {/* Center */}
       <div className="flex flex-col items-center gap-8 text-center">
         
-        <h1 className="text-4xl font-serif">
-          Make the most of your free time.
-        </h1>
-
-        <p className="text-neutral-500 max-w-xs">
-          Instantly match with the best thing to do on campus right now.
-        </p>
+        <h1 className="text-4xl font-serif">Your next best move at NYU.</h1>
 
         <button
           onClick={() => setStarted(true)}
