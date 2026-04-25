@@ -30,12 +30,14 @@ export default function AIAssistantRegistrationModal({
   currentEvent,
   onClose,
   onAutoRegister,
+  onSelectEvent,
 }: {
   isOpen: boolean;
   events: Event[];
   currentEvent: Event;
   onClose: () => void;
   onAutoRegister: (eventId: string) => void;
+  onSelectEvent: (index: number) => void;
 }) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState("");
@@ -57,12 +59,8 @@ export default function AIAssistantRegistrationModal({
     setInput("");
     setMessages([
       createAssistantMessage(
-        "Hi! I'm your FLANO AI assistant. I can search events and auto-register you from chat."
+        "Hi! I'm your FLANO AI assistant. I can search events and auto-register you from chat.\nTry: 'I wanna register for a hackathon near me' or 'register me for the best event right now'.\nCurrent event pool is now clickable below. Tap any event to jump there."
       ),
-      createAssistantMessage(
-        "Try: 'I wanna register for a hackathon near me' or 'register me for the best event right now'."
-      ),
-      createAssistantMessage(`Current event pool:\n${eventsDigest}`),
     ]);
   }, [eventsDigest, isOpen]);
 
@@ -113,7 +111,7 @@ export default function AIAssistantRegistrationModal({
     const lower = value.toLowerCase();
 
     if (/(show|list|what).*(event|options)/.test(lower)) {
-      addAssistant(`Here are your current matches:\n${eventsDigest}`);
+      addAssistant("Here are your current matches. Tap any event button below to jump there.");
       return;
     }
 
@@ -164,6 +162,26 @@ export default function AIAssistantRegistrationModal({
               {message.text}
             </div>
           ))}
+
+          <div className="rounded-2xl border border-neutral-200 bg-white p-3">
+            <p className="text-xs font-semibold uppercase tracking-wide text-neutral-600">
+              Current event pool
+            </p>
+            <div className="mt-2 grid gap-2">
+              {events.map((event, index) => (
+                <button
+                  key={event.id}
+                  onClick={() => onSelectEvent(index)}
+                  className="rounded-xl border border-neutral-200 px-3 py-2 text-left text-sm text-neutral-800 transition hover:border-[#57068C] hover:bg-[#57068C]/5"
+                >
+                  <span className="font-medium">{index + 1}. {event.title}</span>
+                  <span className="block text-xs text-neutral-600">
+                    {event.location.name} - {event.matchScore}% match
+                  </span>
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
 
         <form onSubmit={handleSubmit} className="border-t border-neutral-200 bg-white p-4 sm:p-5">

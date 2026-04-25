@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useOnboarding } from "./contexts/OnboardingContext";
 import { getRecommendedEvents } from "./services/eventService";
 import AIAssistantRegistrationModal from "./components/AIAssistantRegistrationModal";
@@ -12,7 +12,8 @@ export default function Recommendations() {
   const [currentEventIndex, setCurrentEventIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [showAIAgent, setShowAIAgent] = useState(false);
-  const [lastRegisteredEventId, setLastRegisteredEventId] = useState<string | null>(null);
+  const [registeredEventIds, setRegisteredEventIds] = useState<string[]>([]);
+  const eventCardRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (location && preferences) {
@@ -76,6 +77,8 @@ export default function Recommendations() {
   }
 
   const currentEvent = events[currentEventIndex];
+  const isCurrentEventRegistered = registeredEventIds.includes(currentEvent.id);
+  const registeredEvents = events.filter((event) => registeredEventIds.includes(event.id));
 
   const formatTime = (date: Date): string => {
     const now = Date.now();
@@ -121,6 +124,13 @@ export default function Recommendations() {
           <p className="text-xs sm:text-sm md:text-base text-neutral-600 mt-1">
             {currentEventIndex + 1} of {events.length} recommendations
           </p>
+          {registeredEvents.length > 0 && (
+            <div className="mt-3 rounded-2xl border border-green-200 bg-green-50 px-3 py-2 sm:px-4">
+              <p className="text-xs sm:text-sm font-medium text-green-800">
+                Registered: {registeredEvents.map((event) => event.title).join(" • ")}
+              </p>
+            </div>
+          )}
           <button
             onClick={() => setShowAIAgent(true)}
             className="mt-3 inline-flex items-center gap-2 rounded-full border border-[#57068C] bg-white px-4 py-2 text-xs sm:text-sm font-medium text-[#57068C] hover:bg-[#57068C]/10 transition"
@@ -131,7 +141,10 @@ export default function Recommendations() {
 
         <div className="grid gap-4 sm:gap-6 md:gap-8 lg:grid-cols-[minmax(0,1fr)_20rem] xl:grid-cols-[minmax(0,1fr)_24rem]">
           {/* Main Event Card */}
-          <div className="bg-white rounded-2xl sm:rounded-3xl md:rounded-4xl p-4 sm:p-6 md:p-10 shadow-sm border border-neutral-200">
+          <div
+            ref={eventCardRef}
+            className="bg-white rounded-2xl sm:rounded-3xl md:rounded-4xl p-4 sm:p-6 md:p-10 shadow-sm border border-neutral-200"
+          >
             {/* Match Score Badge */}
             <div className={`inline-block px-3 sm:px-4 md:px-5 py-1 md:py-2 rounded-full text-xs sm:text-sm md:text-base font-semibold mb-3 sm:mb-4 md:mb-6 ${getMatchColor(currentEvent.matchScore)}`}>
               {currentEvent.matchScore}% Match
@@ -169,14 +182,26 @@ export default function Recommendations() {
 
             {/* CTA Button */}
             <div className="mt-6 sm:mt-8 grid gap-2 sm:gap-3">
-              <button className="w-full bg-[#57068C] text-white py-3 sm:py-4 rounded-full font-medium hover:opacity-90 transition text-sm sm:text-base">
-                I'm interested
+              <button
+                onClick={() => {
+                  if (!isCurrentEventRegistered) {
+                    setRegisteredEventIds((prev) => [...prev, currentEvent.id]);
+                  }
+                }}
+                disabled={isCurrentEventRegistered}
+                className={`w-full py-3 sm:py-4 rounded-full font-medium transition text-sm sm:text-base ${
+                  isCurrentEventRegistered
+                    ? "bg-green-600 text-white cursor-not-allowed"
+                    : "bg-[#57068C] text-white hover:opacity-90"
+                }`}
+              >
+                {isCurrentEventRegistered ? "Registered" : "I'm interested"}
               </button>
             </div>
 
-            {lastRegisteredEventId === currentEvent.id && (
+            {isCurrentEventRegistered && (
               <p className="mt-3 text-xs sm:text-sm text-green-700 bg-green-50 border border-green-200 rounded-xl px-3 py-2">
-                Registration complete via AI assistant.
+                You're already registered for this event.
               </p>
             )}
           </div>
@@ -263,7 +288,14 @@ export default function Recommendations() {
         currentEvent={currentEvent}
         onClose={() => setShowAIAgent(false)}
         onAutoRegister={(eventId) => {
-          setLastRegisteredEventId(eventId);
+          setRegisteredEventIds((prev) => (prev.includes(eventId) ? prev : [...prev, eventId]));
+        }}
+        onSelectEvent={(index) => {
+          setCurrentEventIndex(index);
+          setShowAIAgent(false);
+          window.setTimeout(() => {
+            eventCardRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+          }, 200);
         }}
       />
     </main>
