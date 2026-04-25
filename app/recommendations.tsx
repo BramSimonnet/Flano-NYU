@@ -16,6 +16,7 @@ export default function Recommendations() {
   const [events, setEvents] = useState<Event[]>([]);
   const [currentEventIndex, setCurrentEventIndex] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [nowMs, setNowMs] = useState(() => Date.now());
   const [showAIAgent, setShowAIAgent] = useState(false);
   const [registeredByEventId, setRegisteredByEventId] = useState<Record<string, RegistrationDetails>>({});
   const [showRegistrationModal, setShowRegistrationModal] = useState(false);
@@ -34,6 +35,14 @@ export default function Recommendations() {
       }, 800);
     }
   }, [location, preferences]);
+
+  useEffect(() => {
+    const intervalId = window.setInterval(() => {
+      setNowMs(Date.now());
+    }, 30000);
+
+    return () => window.clearInterval(intervalId);
+  }, []);
 
   if (loading) {
     return (
@@ -95,8 +104,7 @@ export default function Recommendations() {
   const displayedAttendeeCount = currentEvent.attendeeCount + (isCurrentEventRegistered ? 1 : 0);
 
   const formatTime = (date: Date): string => {
-    const now = Date.now();
-    const diff = date.getTime() - now;
+    const diff = date.getTime() - nowMs;
     const minutes = Math.floor(diff / (1000 * 60));
 
     if (minutes < 1) return "Starting now";
@@ -228,7 +236,7 @@ export default function Recommendations() {
             {/* Why This Event */}
             <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-neutral-50 rounded-lg sm:rounded-xl border border-neutral-200">
               <p className="text-xs sm:text-sm text-neutral-700 leading-relaxed">
-                <span className="font-semibold">Why you:</span> You're interested in {currentEvent.category.toLowerCase()}, it fits your time, and you're nearby.
+                <span className="font-semibold">Why you:</span> You&apos;re interested in {currentEvent.category.toLowerCase()}, it fits your time, and you&apos;re nearby.
               </p>
             </div>
 
@@ -272,7 +280,7 @@ export default function Recommendations() {
 
             {isCurrentEventRegistered && (
               <p className="mt-3 text-xs sm:text-sm text-green-700 bg-green-50 border border-green-200 rounded-xl px-3 py-2">
-                You're already registered for this event.
+                You&apos;re already registered for this event.
               </p>
             )}
           </div>
@@ -354,32 +362,34 @@ export default function Recommendations() {
       </section>
       </div>
 
-      <AIAssistantRegistrationModal
-        isOpen={showAIAgent}
-        events={events}
-        currentEvent={currentEvent}
-        onClose={() => setShowAIAgent(false)}
-        onAutoRegister={(eventId) => {
-          setRegisteredByEventId((prev) =>
-            prev[eventId]
-              ? prev
-              : {
-                  ...prev,
-                  [eventId]: {
-                    fullName: "Auto-registered user",
-                    email: "not-provided@example.com",
-                  },
-                }
-          );
-        }}
-        onSelectEvent={(index) => {
-          setCurrentEventIndex(index);
-          setShowAIAgent(false);
-          window.setTimeout(() => {
-            eventCardRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
-          }, 200);
-        }}
-      />
+      {showAIAgent && (
+        <AIAssistantRegistrationModal
+          isOpen={showAIAgent}
+          events={events}
+          currentEvent={currentEvent}
+          onClose={() => setShowAIAgent(false)}
+          onAutoRegister={(eventId) => {
+            setRegisteredByEventId((prev) =>
+              prev[eventId]
+                ? prev
+                : {
+                    ...prev,
+                    [eventId]: {
+                      fullName: "Auto-registered user",
+                      email: "not-provided@example.com",
+                    },
+                  }
+            );
+          }}
+          onSelectEvent={(index) => {
+            setCurrentEventIndex(index);
+            setShowAIAgent(false);
+            window.setTimeout(() => {
+              eventCardRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+            }, 200);
+          }}
+        />
+      )}
       {showRegistrationModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 sm:p-6">
           <div className="w-full max-w-md rounded-3xl border border-neutral-200 bg-white shadow-2xl overflow-hidden">

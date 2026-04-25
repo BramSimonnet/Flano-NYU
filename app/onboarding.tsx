@@ -149,14 +149,14 @@ export default function Onboarding({
         <section className="max-w-md md:max-w-2xl lg:max-w-4xl mx-auto w-full flex flex-col gap-4 sm:gap-6 md:gap-8">
           <div>
             <p className="text-xs sm:text-sm md:text-base text-neutral-700 mb-2">Step 1 of 3</p>
-            <h1 className="text-lg sm:text-xl md:text-3xl lg:text-4xl font-serif">Let's find what's nearby</h1>
+            <h1 className="text-lg sm:text-xl md:text-3xl lg:text-4xl font-serif">Let&apos;s find what&apos;s nearby</h1>
           </div>
 
           <div className="bg-[#FEF7FB] rounded-2xl sm:rounded-3xl p-3 sm:p-5 md:p-7 shadow-sm border border-neutral-200 flex flex-col gap-6">
-            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+            <div className="flex flex-col items-center gap-4 text-center">
               <div>
                 <p className="text-xs sm:text-sm md:text-base text-neutral-600">
-                  We'll use your location to find events near you
+                  We&apos;ll use your location to find events near you
                 </p>
                 <p className="text-xs sm:text-sm md:text-base text-neutral-600 mt-2">
                   Your location is private and only used for matching
@@ -165,30 +165,10 @@ export default function Onboarding({
               <button
                 onClick={requestLocation}
                 disabled={loadingLocation}
-                className="bg-[#57068C] text-white px-6 py-3 rounded-full font-medium hover:opacity-90 transition disabled:opacity-50 text-sm sm:text-base md:text-lg"
+                className="mt-3 sm:mt-4 bg-[#57068C] text-white px-10 sm:px-12 py-3 rounded-full font-medium hover:opacity-90 transition disabled:opacity-50 text-sm sm:text-base md:text-lg"
               >
                 {loadingLocation ? "Getting location..." : "Share my location"}
               </button>
-<<<<<<< HEAD
-=======
-            </div>
-
-            <div className="w-full space-y-2 sm:space-y-2 md:space-y-3">
-              <button
-                onClick={() => {
-                  const mockLocation: UserLocation = {
-                    latitude: 40.7294,
-                    longitude: -73.9965,
-                    accuracy: 20,
-                  };
-                  setLocation(mockLocation);
-                  setStep("interests");
-                }}
-                className="w-full bg-neutral-200 text-neutral-700 py-3 sm:py-4 md:py-5 rounded-full font-medium hover:bg-neutral-300 transition text-sm sm:text-base md:text-lg"
-              >
-                Test with Sample Location
-              </button>
->>>>>>> 67e61f2 (commit)
             </div>
 
             {locationError && (
@@ -261,7 +241,7 @@ export default function Onboarding({
               >
                 <p className="font-semibold text-sm sm:text-base md:text-lg">✨ Surprise me!</p>
                 <p className="text-xs sm:text-sm md:text-base text-white/80 mt-1">
-                  Don't know what you want? Let's explore 3 random categories
+                  Don&apos;t know what you want? Let&apos;s explore 3 random categories
                 </p>
               </button>
             </div>
@@ -318,7 +298,7 @@ export default function Onboarding({
             <p className="text-xs sm:text-sm md:text-base text-neutral-700 mb-2">Step 3 of 3</p>
             <h1 className="text-lg sm:text-xl md:text-3xl lg:text-4xl font-serif">How much time do you have?</h1>
             <p className="text-neutral-700 mt-2 text-xs sm:text-sm md:text-base">
-              We'll automatically search {getRadiusDescription(getAutoRadius(DURATION_OPTIONS[1].value))} based on your availability
+              We&apos;ll automatically search {getRadiusDescription(getAutoRadius(DURATION_OPTIONS[1].value))} based on your availability
             </p>
           </div>
 

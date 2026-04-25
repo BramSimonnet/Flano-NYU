@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import type { FormEvent } from "react";
 import type { Event } from "../types";
 
@@ -39,30 +39,12 @@ export default function AIAssistantRegistrationModal({
   onAutoRegister: (eventId: string) => void;
   onSelectEvent: (index: number) => void;
 }) {
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>([
+    createAssistantMessage(
+      "Hi! I'm your FLANO AI assistant. I can search events and auto-register you from chat.\nTry: 'I wanna register for a hackathon near me' or 'register me for the best event right now'.\nCurrent event pool is now clickable below. Tap any event to jump there."
+    ),
+  ]);
   const [input, setInput] = useState("");
-
-  const eventsDigest = useMemo(
-    () =>
-      events
-        .map(
-          (event, index) =>
-            `${index + 1}. ${event.title} (${event.category}) at ${event.location.name} - ${event.matchScore}% match`
-        )
-        .join("\n"),
-    [events]
-  );
-
-  useEffect(() => {
-    if (!isOpen) return;
-
-    setInput("");
-    setMessages([
-      createAssistantMessage(
-        "Hi! I'm your FLANO AI assistant. I can search events and auto-register you from chat.\nTry: 'I wanna register for a hackathon near me' or 'register me for the best event right now'.\nCurrent event pool is now clickable below. Tap any event to jump there."
-      ),
-    ]);
-  }, [eventsDigest, isOpen]);
 
   if (!isOpen) return null;
 
