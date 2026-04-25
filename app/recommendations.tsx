@@ -6,13 +6,22 @@ import { getRecommendedEvents } from "./services/eventService";
 import AIAssistantRegistrationModal from "./components/AIAssistantRegistrationModal";
 import type { Event } from "./types";
 
+interface RegistrationDetails {
+  fullName: string;
+  email: string;
+}
+
 export default function Recommendations() {
   const { location, preferences } = useOnboarding();
   const [events, setEvents] = useState<Event[]>([]);
   const [currentEventIndex, setCurrentEventIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [showAIAgent, setShowAIAgent] = useState(false);
-  const [registeredEventIds, setRegisteredEventIds] = useState<string[]>([]);
+  const [registeredByEventId, setRegisteredByEventId] = useState<Record<string, RegistrationDetails>>({});
+  const [showRegistrationModal, setShowRegistrationModal] = useState(false);
+  const [registrationFullName, setRegistrationFullName] = useState("");
+  const [registrationEmail, setRegistrationEmail] = useState("");
+  const [registrationError, setRegistrationError] = useState("");
   const eventCardRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -77,8 +86,9 @@ export default function Recommendations() {
   }
 
   const currentEvent = events[currentEventIndex];
-  const isCurrentEventRegistered = registeredEventIds.includes(currentEvent.id);
-  const registeredEvents = events.filter((event) => registeredEventIds.includes(event.id));
+  const isCurrentEventRegistered = Boolean(registeredByEventId[currentEvent.id]);
+  const registeredEvents = events.filter((event) => Boolean(registeredByEventId[event.id]));
+  const displayedAttendeeCount = currentEvent.attendeeCount + (isCurrentEventRegistered ? 1 : 0);
 
   const formatTime = (date: Date): string => {
     const now = Date.now();
@@ -106,6 +116,55 @@ export default function Recommendations() {
       ? `&origin=${encodeURIComponent(`${location.latitude},${location.longitude}`)}`
       : ""
   }&travelmode=walking`;
+
+  const resetRegistrationForm = () => {
+    setRegistrationFullName("");
+    setRegistrationEmail("");
+    setRegistrationError("");
+  };
+
+  const openRegistrationModal = () => {
+    resetRegistrationForm();
+    setShowRegistrationModal(true);
+  };
+
+  const closeRegistrationModal = () => {
+    setShowRegistrationModal(false);
+    resetRegistrationForm();
+  };
+
+  const handleRegisterCurrentEvent = () => {
+    const fullName = registrationFullName.trim();
+    const email = registrationEmail.trim();
+
+    if (!fullName || !email) {
+      setRegistrationError("Please enter your full name and email.");
+      return;
+    }
+
+    const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    if (!isValidEmail) {
+      setRegistrationError("Please enter a valid email address.");
+      return;
+    }
+
+    setRegisteredByEventId((prev) => ({
+      ...prev,
+      [currentEvent.id]: {
+        fullName,
+        email,
+      },
+    }));
+    closeRegistrationModal();
+  };
+
+  const handleUnregisterCurrentEvent = () => {
+    setRegisteredByEventId((prev) => {
+      const updated = { ...prev };
+      delete updated[currentEvent.id];
+      return updated;
+    });
+  };
 
   return (
     <main className="min-h-screen bg-neutral-100 px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16 flex flex-col">
@@ -176,7 +235,7 @@ export default function Recommendations() {
             <div className="mt-4 sm:mt-6 flex items-center gap-2">
               <span className="inline-block w-5 h-5 sm:w-6 sm:h-6 bg-[#57068C] rounded-full shrink-0"></span>
               <p className="text-xs sm:text-sm text-neutral-600">
-                <span className="font-semibold text-neutral-900">{currentEvent.attendeeCount}</span> people going
+                <span className="font-semibold text-neutral-900">{displayedAttendeeCount}</span> people going
               </p>
             </div>
 
@@ -185,7 +244,7 @@ export default function Recommendations() {
               <button
                 onClick={() => {
                   if (!isCurrentEventRegistered) {
-                    setRegisteredEventIds((prev) => [...prev, currentEvent.id]);
+                    openRegistrationModal();
                   }
                 }}
                 disabled={isCurrentEventRegistered}
@@ -197,6 +256,14 @@ export default function Recommendations() {
               >
                 {isCurrentEventRegistered ? "Registered" : "I'm interested"}
               </button>
+              {isCurrentEventRegistered && (
+                <button
+                  onClick={handleUnregisterCurrentEvent}
+                  className="w-full py-3 sm:py-4 rounded-full font-medium transition text-sm sm:text-base bg-white text-[#57068C] border border-[#57068C] hover:bg-[#57068C]/5"
+                >
+                  Unregister
+                </button>
+              )}
             </div>
 
             {isCurrentEventRegistered && (
@@ -288,7 +355,17 @@ export default function Recommendations() {
         currentEvent={currentEvent}
         onClose={() => setShowAIAgent(false)}
         onAutoRegister={(eventId) => {
-          setRegisteredEventIds((prev) => (prev.includes(eventId) ? prev : [...prev, eventId]));
+          setRegisteredByEventId((prev) =>
+            prev[eventId]
+              ? prev
+              : {
+                  ...prev,
+                  [eventId]: {
+                    fullName: "Auto-registered user",
+                    email: "not-provided@example.com",
+                  },
+                }
+          );
         }}
         onSelectEvent={(index) => {
           setCurrentEventIndex(index);
@@ -298,6 +375,62 @@ export default function Recommendations() {
           }, 200);
         }}
       />
+      {showRegistrationModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 sm:p-6">
+          <div className="w-full max-w-md rounded-3xl border border-neutral-200 bg-white shadow-2xl overflow-hidden">
+            <div className="flex items-center justify-between border-b border-neutral-200 px-5 py-4">
+              <div>
+                <p className="text-xs uppercase tracking-[0.2em] text-[#57068C] font-semibold">Register</p>
+                <h2 className="text-lg font-serif text-neutral-900">{currentEvent.title}</h2>
+              </div>
+              <button
+                onClick={closeRegistrationModal}
+                className="rounded-full border border-neutral-300 px-3 py-1.5 text-sm text-neutral-700 hover:bg-neutral-100 transition"
+              >
+                Close
+              </button>
+            </div>
+            <div className="p-5 space-y-4">
+              <div>
+                <label className="block text-sm text-neutral-700 mb-1">Full name</label>
+                <input
+                  value={registrationFullName}
+                  onChange={(e) => {
+                    setRegistrationFullName(e.target.value);
+                    if (registrationError) setRegistrationError("");
+                  }}
+                  placeholder="e.g. Alex Johnson"
+                  className="w-full rounded-xl border border-neutral-300 px-4 py-2.5 text-sm text-neutral-900 outline-none focus:border-[#57068C]"
+                />
+              </div>
+              <div>
+                <label className="block text-sm text-neutral-700 mb-1">Email</label>
+                <input
+                  type="email"
+                  value={registrationEmail}
+                  onChange={(e) => {
+                    setRegistrationEmail(e.target.value);
+                    if (registrationError) setRegistrationError("");
+                  }}
+                  placeholder="you@nyu.edu"
+                  className="w-full rounded-xl border border-neutral-300 px-4 py-2.5 text-sm text-neutral-900 outline-none focus:border-[#57068C]"
+                />
+              </div>
+              {registrationError && (
+                <p className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-xl px-3 py-2">
+                  {registrationError}
+                </p>
+              )}
+              <button
+                onClick={handleRegisterCurrentEvent}
+                className="w-full rounded-full bg-[#57068C] px-5 py-3 text-sm font-medium text-white hover:opacity-90 transition"
+              >
+                Confirm registration
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </main>
   );
 }
