@@ -165,9 +165,31 @@ export default function Onboarding({
               <button
                 onClick={requestLocation}
                 disabled={loadingLocation}
-                className="mt-3 sm:mt-4 bg-[#57068C] text-white px-10 sm:px-12 py-3 rounded-full font-medium hover:opacity-90 transition disabled:opacity-50 text-sm sm:text-base md:text-lg"
+                className="mt-3 sm:mt-4 bg-[#57068C] text-white px-10 sm:px-12 py-3 rounded-full font-medium hover:opacity-90 transition disabled:opacity-50 text-sm sm:text-base md:text-lg inline-flex items-center gap-2"
               >
-                {loadingLocation ? "Getting location..." : "Share my location"}
+                {!loadingLocation && (
+                  <svg
+                    className="w-4 h-4 sm:w-5 sm:h-5"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                    />
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                    />
+                  </svg>
+                )}
+                <span>{loadingLocation ? "Getting location..." : "Share my location"}</span>
               </button>
             </div>
 
@@ -176,30 +198,6 @@ export default function Onboarding({
                 <p className="text-xs sm:text-sm md:text-base text-red-700">{locationError}</p>
               </div>
             )}
-
-            <div className="flex justify-center">
-              <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-neutral-100 rounded-full flex items-center justify-center">
-                <svg
-                  className="w-6 h-6 sm:w-7 sm:h-7 md:w-10 md:h-10 text-neutral-600"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                </svg>
-              </div>
-            </div>
 
             <p className="text-xs sm:text-sm md:text-base text-neutral-600 text-center px-2">
               You can change this anytime in settings
