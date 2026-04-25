@@ -36,14 +36,14 @@ export default function Home() {
       
       {/* Logo */}
       <div className="text-xl sm:text-2xl font-serif tracking-wide">
-        FLÂNO <span className="text-neutral-400 text-sm sm:text-base">@ NYU</span>
+        FLÂNO <span className="text-[#57068C] text-sm sm:text-base font-semibold">@ NYU</span>
       </div>
 
       {/* Center */}
       <div className="flex flex-col items-center gap-6 sm:gap-8 text-center">
         
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif leading-tight">
-          Make the most of your free time.
+          Your next best move at NYU.
         </h1>
 
         <p className="text-neutral-500 max-w-xs sm:max-w-md text-sm sm:text-base leading-relaxed">
@@ -52,7 +52,7 @@ export default function Home() {
 
         <button
           onClick={() => setShowOnboarding(true)}
-          className="bg-[#7A5A45] text-white px-6 sm:px-8 py-3 sm:py-4 rounded-xl sm:rounded-2xl text-base sm:text-lg font-medium hover:opacity-90 transition"
+          className="bg-[#57068C] text-white px-8 sm:px-10 py-3 sm:py-4 rounded-full text-base sm:text-lg font-medium hover:opacity-90 transition tracking-wide"
         >
           I'm free now
         </button>

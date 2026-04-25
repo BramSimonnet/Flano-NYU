@@ -194,7 +194,7 @@ export default function Onboarding({
               <button
                 onClick={requestLocation}
                 disabled={loadingLocation}
-                className="w-full bg-[#7A5A45] text-white py-3 sm:py-4 rounded-xl sm:rounded-2xl font-medium hover:opacity-90 transition disabled:opacity-50 text-sm sm:text-base"
+                className="w-full bg-[#57068C] text-white py-3 sm:py-4 rounded-full font-medium hover:opacity-90 transition disabled:opacity-50 text-sm sm:text-base"
               >
                 {loadingLocation ? "Getting location..." : "Share my location"}
               </button>
@@ -238,7 +238,7 @@ export default function Onboarding({
           </div>
 
           {/* Surprise Me Button */}
-          <div className="bg-gradient-to-r from-[#7A5A45] to-[#9A7A65] rounded-xl sm:rounded-2xl p-3 sm:p-4 text-white\">
+          <div className="bg-gradient-to-r from-[#57068C] to-[#7B2CBF] rounded-xl sm:rounded-2xl p-3 sm:p-4 text-white">
             <button
               onClick={() => {
                 const randomCategories = INTEREST_OPTIONS.sort(
@@ -269,7 +269,7 @@ export default function Onboarding({
                   onClick={() => toggleInterest(interest)}
                   className={`p-2 sm:p-3 rounded-lg sm:rounded-xl text-xs sm:text-sm font-medium transition ${
                     preferences.interests.includes(interest)
-                      ? "bg-[#7A5A45] text-white"
+                      ? "bg-[#57068C] text-white"
                       : "bg-white text-neutral-700 border border-neutral-200 hover:border-neutral-300"
                   }`}
                 >
@@ -284,7 +284,7 @@ export default function Onboarding({
             <button
               onClick={() => setStep("duration")}
               disabled={preferences.interests.length === 0}
-              className="w-full bg-[#7A5A45] text-white py-3 sm:py-4 rounded-xl sm:rounded-2xl font-medium hover:opacity-90 transition disabled:opacity-50 text-sm sm:text-base"
+              className="w-full bg-[#57068C] text-white py-3 sm:py-4 rounded-full font-medium hover:opacity-90 transition disabled:opacity-50 text-sm sm:text-base"
             >
               Next
             </button>
@@ -332,7 +332,7 @@ export default function Onboarding({
               <button
                 key={option.value}
                 onClick={() => handleDurationSelect(option.value)}
-                className="w-full bg-white border border-neutral-200 rounded-lg sm:rounded-2xl p-3 sm:p-4 text-left hover:border-neutral-300 transition group"
+                className="w-full bg-white border-2 border-neutral-200 rounded-xl sm:rounded-2xl p-3 sm:p-4 text-left hover:border-[#57068C] transition group"
               >
                 <p className="font-medium text-sm sm:text-base text-neutral-900">{option.label}</p>
                 <p className="text-xs sm:text-sm text-neutral-500 mt-1">

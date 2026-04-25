@@ -63,7 +63,7 @@ export default function Recommendations() {
           </div>
           <button
             onClick={() => window.location.href = "/"}
-            className="mt-6 bg-[#7A5A45] text-white px-8 py-4 rounded-2xl font-medium"
+            className="mt-6 bg-[#57068C] text-white px-8 py-4 rounded-full font-medium"
           >
             Adjust preferences
           </button>
@@ -143,14 +143,14 @@ export default function Recommendations() {
 
           {/* Attendee Count */}
           <div className="mt-4 sm:mt-6 flex items-center gap-2">
-            <span className="inline-block w-5 h-5 sm:w-6 sm:h-6 bg-[#7A5A45] rounded-full flex-shrink-0"></span>
+            <span className="inline-block w-5 h-5 sm:w-6 sm:h-6 bg-[#57068C] rounded-full flex-shrink-0"></span>
             <p className="text-xs sm:text-sm text-neutral-600">
               <span className="font-semibold text-neutral-900">{currentEvent.attendeeCount}</span> people going
             </p>
           </div>
 
           {/* CTA Button */}
-          <button className="mt-6 sm:mt-8 w-full bg-[#7A5A45] text-white py-3 sm:py-4 rounded-xl sm:rounded-2xl font-medium hover:opacity-90 transition text-sm sm:text-base">
+          <button className="mt-6 sm:mt-8 w-full bg-[#57068C] text-white py-3 sm:py-4 rounded-full font-medium hover:opacity-90 transition text-sm sm:text-base">
             I'm interested
           </button>
         </div>
@@ -176,7 +176,7 @@ export default function Recommendations() {
                   onClick={() => setCurrentEventIndex(index)}
                   className={`rounded-full transition ${
                     index === currentEventIndex
-                      ? "bg-[#7A5A45] w-4 sm:w-6 h-2 sm:h-2"
+                      ? "bg-[#57068C] w-4 sm:w-6 h-2 sm:h-2"
                       : "w-2 h-2 bg-neutral-300 hover:bg-neutral-400"
                   }`}
                   aria-label={`Go to event ${index + 1}`}
