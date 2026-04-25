@@ -236,7 +236,7 @@ export default function Recommendations() {
               ref={eventCardRef}
               className="bg-white rounded-2xl sm:rounded-3xl md:rounded-4xl p-4 sm:p-6 md:p-10 shadow-sm border border-neutral-200"
             >
-            <p className="text-xs sm:text-sm md:text-base text-neutral-600 mt-1">
+            <p className="text-xs sm:text-sm md:text-base text-neutral-600 mt-1 mb-2 sm:mb-3">
               {currentEventIndex + 1} of {events.length} recommendations
             </p>
             <div className={`inline-block px-3 sm:px-4 md:px-5 py-1 md:py-2 rounded-full text-xs sm:text-sm md:text-base font-semibold mb-3 sm:mb-4 md:mb-6 ${getMatchColor(currentEvent.matchScore)}`}>

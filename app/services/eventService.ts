@@ -82,6 +82,12 @@ const calculateDistance = (
   return R * c;
 };
 
+// Approximate one-way walking time in minutes for a given distance.
+const estimateTravelMinutes = (distanceKm: number): number => {
+  const WALKING_MINUTES_PER_KM = 12; // ~5 km/h walking pace
+  return distanceKm * WALKING_MINUTES_PER_KM;
+};
+
 // Calculate match score based on multiple factors
 const calculateMatchScore = (
   event: Event,
@@ -107,12 +113,13 @@ const calculateMatchScore = (
   }
 
   // 2. Time availability (30 points max)
-  // Events that fit within the user's available time score higher
-  if (event.duration <= userPreferences.maxDuration) {
-    const timeScore = (1 - event.duration / userPreferences.maxDuration) * 30;
+  // Enforce that travel + event duration fits the user's selected time budget.
+  const totalTimeNeeded = event.duration + estimateTravelMinutes(distance);
+  if (totalTimeNeeded <= userPreferences.maxDuration) {
+    const timeScore = (1 - totalTimeNeeded / userPreferences.maxDuration) * 30;
     score += timeScore;
   } else {
-    // Event is too long
+    // Event does not fit the user's total available time.
     return -1;
   }
 
@@ -155,6 +162,22 @@ export const getRecommendedEvents = (
   userLocation: UserLocation,
   userPreferences: UserPreferences
 ): Event[] => {
+  const eventFitsConstraints = (event: Event): boolean => {
+    const distance = calculateDistance(
+      userLocation.latitude,
+      userLocation.longitude,
+      event.location.latitude,
+      event.location.longitude
+    );
+
+    if (distance > userPreferences.radiusKm) {
+      return false;
+    }
+
+    const totalTimeNeeded = event.duration + estimateTravelMinutes(distance);
+    return totalTimeNeeded <= userPreferences.maxDuration;
+  };
+
   // Calculate match scores for all events
   const scoredEvents = MOCK_EVENTS.map((event) => ({
     ...event,
@@ -170,7 +193,9 @@ export const getRecommendedEvents = (
   }
 
   // Presentation fallback: keep demo flow moving even with narrow filters.
-  const relaxedMatches = MOCK_EVENTS.map((event) => {
+  const relaxedMatches = MOCK_EVENTS
+    .filter(eventFitsConstraints)
+    .map((event) => {
     const distance = calculateDistance(
       userLocation.latitude,
       userLocation.longitude,
@@ -179,7 +204,11 @@ export const getRecommendedEvents = (
     );
 
     const distanceScore = Math.max(0, 40 - distance * 18);
-    const durationScore = Math.max(0, 30 - Math.max(0, event.duration - userPreferences.maxDuration) * 0.45);
+      const totalTimeNeeded = event.duration + estimateTravelMinutes(distance);
+      const durationScore = Math.max(
+        0,
+        30 - Math.max(0, totalTimeNeeded - userPreferences.maxDuration) * 0.45
+      );
     const interestScore =
       userPreferences.interests.length === 0 ||
       userPreferences.interests.includes(event.category)
