@@ -198,21 +198,6 @@ export default function Onboarding({
               >
                 {loadingLocation ? "Getting location..." : "Share my location"}
               </button>
-
-              <button
-                onClick={() => {
-                  const mockLocation: UserLocation = {
-                    latitude: 40.7294,
-                    longitude: -73.9965,
-                    accuracy: 20,
-                  };
-                  setLocation(mockLocation);
-                  setStep("interests");
-                }}
-                className="w-full bg-neutral-200 text-neutral-700 py-3 sm:py-4 md:py-5 rounded-full font-medium hover:bg-neutral-300 transition text-sm sm:text-base md:text-lg"
-              >
-                Test with Sample Location
-              </button>
             </div>
 
             <p className="text-xs sm:text-sm md:text-base text-neutral-600 text-center px-2">
