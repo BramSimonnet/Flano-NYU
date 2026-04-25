@@ -266,7 +266,7 @@ export default function AIAssistantRegistrationModal({
       return;
     }
 
-    if (/(organizer|who.*host|who.*running|hosted by)/.test(lower)) {
+    if (/(organizer|organizing|organized by|who.*host|who.*running|who.*organizing|hosted by)/.test(lower)) {
       const referenced = findEventByQuery(value) ?? currentEvent;
       addAssistant(`${referenced.title} is organized by ${referenced.organizer}.`);
       return;
