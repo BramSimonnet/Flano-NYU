@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useOnboarding } from "./contexts/OnboardingContext";
 import { getRecommendedEvents } from "./services/eventService";
+import AIAssistantRegistrationModal from "./components/AIAssistantRegistrationModal";
 import type { Event } from "./types";
 
 export default function Recommendations() {
@@ -10,6 +11,8 @@ export default function Recommendations() {
   const [events, setEvents] = useState<Event[]>([]);
   const [currentEventIndex, setCurrentEventIndex] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [showAIAgent, setShowAIAgent] = useState(false);
+  const [lastRegisteredEventId, setLastRegisteredEventId] = useState<string | null>(null);
 
   useEffect(() => {
     if (location && preferences) {
@@ -32,7 +35,7 @@ export default function Recommendations() {
           ← back
         </button>
 
-        <section className="max-w-md mx-auto w-full flex flex-col gap-6 items-center justify-center min-h-[400px]">
+        <section className="max-w-md mx-auto w-full flex flex-col gap-6 items-center justify-center min-h-100">
           <div className="animate-pulse space-y-4 w-full">
             <div className="h-12 bg-neutral-200 rounded-2xl"></div>
             <div className="h-32 bg-neutral-200 rounded-2xl"></div>
@@ -53,7 +56,7 @@ export default function Recommendations() {
           ← back
         </button>
 
-        <section className="max-w-md mx-auto w-full flex flex-col gap-6 items-center justify-center min-h-[400px]">
+        <section className="max-w-md mx-auto w-full flex flex-col gap-6 items-center justify-center min-h-100">
           <div className="text-center">
             <p className="text-3xl mb-2">😴</p>
             <h2 className="text-2xl font-serif mb-2">No events right now</h2>
@@ -110,6 +113,12 @@ export default function Recommendations() {
           <p className="text-xs sm:text-sm md:text-base text-neutral-600 mt-1">
             {currentEventIndex + 1} of {events.length} recommendations
           </p>
+          <button
+            onClick={() => setShowAIAgent(true)}
+            className="mt-3 inline-flex items-center gap-2 rounded-full border border-[#57068C] bg-white px-4 py-2 text-xs sm:text-sm font-medium text-[#57068C] hover:bg-[#57068C]/10 transition"
+          >
+            ✨ AI assisted chat
+          </button>
         </div>
 
         {/* Main Event Card */}
@@ -123,7 +132,7 @@ export default function Recommendations() {
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-serif mt-2">{currentEvent.title}</h1>
 
           {/* Event Meta */}
-          <p className="text-neutral-700 mt-2 sm:mt-3 text-xs sm:text-sm break-words">
+          <p className="text-neutral-700 mt-2 sm:mt-3 text-xs sm:text-sm wrap-break-word">
             <span className="block sm:inline">{currentEvent.location.name}</span>
             <span className="hidden sm:inline"> · </span>
             <span className="block sm:inline">{formatTime(currentEvent.startTime)}</span>
@@ -143,16 +152,24 @@ export default function Recommendations() {
 
           {/* Attendee Count */}
           <div className="mt-4 sm:mt-6 flex items-center gap-2">
-            <span className="inline-block w-5 h-5 sm:w-6 sm:h-6 bg-[#57068C] rounded-full flex-shrink-0"></span>
+            <span className="inline-block w-5 h-5 sm:w-6 sm:h-6 bg-[#57068C] rounded-full shrink-0"></span>
             <p className="text-xs sm:text-sm text-neutral-600">
               <span className="font-semibold text-neutral-900">{currentEvent.attendeeCount}</span> people going
             </p>
           </div>
 
           {/* CTA Button */}
-          <button className="mt-6 sm:mt-8 w-full bg-[#57068C] text-white py-3 sm:py-4 rounded-full font-medium hover:opacity-90 transition text-sm sm:text-base">
-            I'm interested
-          </button>
+          <div className="mt-6 sm:mt-8 grid gap-2 sm:gap-3">
+            <button className="w-full bg-[#57068C] text-white py-3 sm:py-4 rounded-full font-medium hover:opacity-90 transition text-sm sm:text-base">
+              I'm interested
+            </button>
+          </div>
+
+          {lastRegisteredEventId === currentEvent.id && (
+            <p className="mt-3 text-xs sm:text-sm text-green-700 bg-green-50 border border-green-200 rounded-xl px-3 py-2">
+              Registration complete via AI assistant.
+            </p>
+          )}
         </div>
 
         {/* Navigation */}
@@ -202,6 +219,16 @@ export default function Recommendations() {
           🎯 Personalized for your next {preferences?.maxDuration} minutes
         </p>
       </section>
+
+      <AIAssistantRegistrationModal
+        isOpen={showAIAgent}
+        events={events}
+        currentEvent={currentEvent}
+        onClose={() => setShowAIAgent(false)}
+        onAutoRegister={(eventId) => {
+          setLastRegisteredEventId(eventId);
+        }}
+      />
     </main>
   );
 }
