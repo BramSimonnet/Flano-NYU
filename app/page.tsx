@@ -39,7 +39,7 @@ export default function Home() {
           <img
             src="/flanologo.png"
             alt="FLÂNO @ NYU"
-            className="h-32 w-auto mx-auto"
+            className="h-40 w-auto mx-auto"
           />
         </div>
 

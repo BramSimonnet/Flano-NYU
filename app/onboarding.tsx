@@ -66,6 +66,23 @@ export default function Onboarding({
     radiusKm: 1.0,
   });
 
+  const topLogo = (
+    <button
+      type="button"
+      onClick={() => {
+        window.location.href = "/";
+      }}
+      className="fixed top-3 left-1/2 -translate-x-1/2 z-50"
+      aria-label="Go to home"
+    >
+      <img
+        src="/flanologo.png"
+        alt="FLANO logo"
+        className="w-[4.5rem] h-[4.5rem] object-contain"
+      />
+    </button>
+  );
+
   // Request Location
   const requestLocation = () => {
     setLoadingLocation(true);
@@ -146,6 +163,7 @@ export default function Onboarding({
   if (step === "location") {
     return (
       <main className="min-h-screen bg-[#F5F2EA] px-4 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-12 flex flex-col">
+        {topLogo}
         <section className="max-w-md md:max-w-2xl lg:max-w-4xl mx-auto w-full flex flex-col gap-4 sm:gap-6 md:gap-8">
           <div>
             <p className="text-xs sm:text-sm md:text-base text-neutral-700 mb-2">Step 1 of 3</p>
@@ -212,6 +230,7 @@ export default function Onboarding({
   if (step === "interests") {
     return (
       <main className="min-h-screen bg-[#F5F2EA] px-4 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-12 flex flex-col">
+        {topLogo}
         <section className="max-w-md md:max-w-2xl lg:max-w-4xl mx-auto w-full flex flex-col gap-4 sm:gap-6 md:gap-8">
           <div>
             <p className="text-xs sm:text-sm md:text-base text-neutral-700 mb-2">Step 2 of 3</p>
@@ -291,6 +310,7 @@ export default function Onboarding({
   if (step === "duration") {
     return (
       <main className="min-h-screen bg-[#F5F2EA] px-4 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-12 flex flex-col">
+        {topLogo}
         <section className="max-w-md md:max-w-2xl lg:max-w-4xl mx-auto w-full flex flex-col gap-4 sm:gap-6 md:gap-8">
           <div>
             <p className="text-xs sm:text-sm md:text-base text-neutral-700 mb-2">Step 3 of 3</p>

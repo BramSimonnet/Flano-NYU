@@ -24,6 +24,22 @@ export default function Recommendations() {
   const [registrationEmail, setRegistrationEmail] = useState("");
   const [registrationError, setRegistrationError] = useState("");
   const eventCardRef = useRef<HTMLDivElement | null>(null);
+  const topLogo = (
+    <button
+      type="button"
+      onClick={() => {
+        window.location.href = "/";
+      }}
+      className="fixed top-3 left-1/2 -translate-x-1/2 z-50"
+      aria-label="Go to home"
+    >
+      <img
+        src="/flanologo.png"
+        alt="FLANO logo"
+        className="w-[4.5rem] h-[4.5rem] object-contain"
+      />
+    </button>
+  );
 
   useEffect(() => {
     if (location && preferences) {
@@ -47,6 +63,7 @@ export default function Recommendations() {
   if (loading) {
     return (
       <main className="min-h-screen bg-[#F5F2EA] px-4 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-12 flex flex-col">
+        {topLogo}
         <button
           onClick={() => window.location.href = "/"}
           className="text-left text-sm text-neutral-500 mb-10"
@@ -70,6 +87,7 @@ export default function Recommendations() {
   if (events.length === 0) {
     return (
       <main className="min-h-screen bg-[#F5F2EA] px-4 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-12 flex flex-col">
+        {topLogo}
         <button
           onClick={() => window.location.href = "/"}
           className="text-left text-sm text-neutral-500 mb-10"
@@ -180,6 +198,7 @@ export default function Recommendations() {
 
   return (
     <main className="min-h-screen bg-[#F5F2EA] px-4 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-12 flex flex-col">
+      {topLogo}
       <button
         onClick={() => window.location.href = "/"}
         className="text-left text-xs sm:text-sm md:text-base text-neutral-700 mb-6 sm:mb-10 md:mb-12"
