@@ -94,28 +94,28 @@ export default function Recommendations() {
   };
 
   return (
-    <main className="min-h-screen bg-neutral-100 px-4 sm:px-6 lg:px-8 py-8 sm:py-12 flex flex-col">
+    <main className="min-h-screen bg-neutral-100 px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16 flex flex-col">
       <button
         onClick={() => window.location.href = "/"}
-        className="text-left text-xs sm:text-sm text-neutral-500 mb-6 sm:mb-10"
+        className="text-left text-xs sm:text-sm md:text-base text-neutral-500 mb-6 sm:mb-10 md:mb-12"
       >
         ← back
       </button>
 
-      <section className="max-w-md md:max-w-2xl lg:max-w-4xl mx-auto w-full flex flex-col gap-4 sm:gap-6">
+      <section className="max-w-md md:max-w-2xl lg:max-w-4xl mx-auto w-full flex flex-col gap-4 sm:gap-6 md:gap-8">
         <div>
-          <p className="text-xs sm:text-sm text-neutral-500">
+          <p className="text-xs sm:text-sm md:text-base text-neutral-500">
             ✨ FLANO picked your next move
           </p>
-          <p className="text-xs text-neutral-400 mt-1">
+          <p className="text-xs sm:text-sm md:text-base text-neutral-400 mt-1">
             {currentEventIndex + 1} of {events.length} recommendations
           </p>
         </div>
 
         {/* Main Event Card */}
-        <div className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-8 shadow-sm border border-neutral-200">
+        <div className="bg-white rounded-2xl sm:rounded-3xl md:rounded-4xl p-4 sm:p-6 md:p-10 shadow-sm border border-neutral-200">
           {/* Match Score Badge */}
-          <div className={`inline-block px-2 sm:px-3 py-1 rounded-full text-xs font-semibold mb-3 sm:mb-4 ${getMatchColor(currentEvent.matchScore)}`}>
+          <div className={`inline-block px-3 sm:px-4 md:px-5 py-1 md:py-2 rounded-full text-xs sm:text-sm md:text-base font-semibold mb-3 sm:mb-4 md:mb-6 ${getMatchColor(currentEvent.matchScore)}`}>
             {currentEvent.matchScore}% Match
           </div>
 
