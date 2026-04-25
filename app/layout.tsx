@@ -1,18 +1,16 @@
-"use client";
-
-import { Geist, Geist_Mono } from "next/font/google";
+import type { Metadata } from "next";
+import { Playfair_Display } from "next/font/google";
 import "./globals.css";
-import { OnboardingProvider } from "./contexts/OnboardingContext";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const playfair = Playfair_Display({
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+export const metadata: Metadata = {
+  title: "FLANO @ NYU",
+  description: "Real-time campus matching for NYU students.",
+};
 
 export default function RootLayout({
   children,
@@ -20,13 +18,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col">
-        <OnboardingProvider>{children}</OnboardingProvider>
-      </body>
+    <html lang="en">
+      <body className={playfair.className}>{children}</body>
     </html>
   );
 }
