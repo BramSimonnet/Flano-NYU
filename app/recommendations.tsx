@@ -35,7 +35,7 @@ export default function Recommendations() {
           ← back
         </button>
 
-        <section className="max-w-md mx-auto w-full flex flex-col gap-6 items-center justify-center min-h-100">
+        <section className="max-w-md mx-auto w-full flex flex-col gap-6 items-center justify-center min-h-[400px]">
           <div className="animate-pulse space-y-4 w-full">
             <div className="h-12 bg-neutral-200 rounded-2xl"></div>
             <div className="h-32 bg-neutral-200 rounded-2xl"></div>
@@ -56,7 +56,7 @@ export default function Recommendations() {
           ← back
         </button>
 
-        <section className="max-w-md mx-auto w-full flex flex-col gap-6 items-center justify-center min-h-100">
+        <section className="max-w-md mx-auto w-full flex flex-col gap-6 items-center justify-center min-h-[400px]">
           <div className="text-center">
             <p className="text-3xl mb-2">😴</p>
             <h2 className="text-2xl font-serif mb-2">No events right now</h2>
@@ -76,6 +76,7 @@ export default function Recommendations() {
   }
 
   const currentEvent = events[currentEventIndex];
+  const isDoodlePreview = currentEventIndex === 0;
 
   const formatTime = (date: Date): string => {
     const now = Date.now();
@@ -122,17 +123,70 @@ export default function Recommendations() {
         </div>
 
         {/* Main Event Card */}
-        <div className="bg-white rounded-2xl sm:rounded-3xl md:rounded-4xl p-4 sm:p-6 md:p-10 shadow-sm border border-neutral-200">
+        <div
+          className={`rounded-2xl sm:rounded-3xl p-4 sm:p-6 md:p-10 border transition-colors ${
+            isDoodlePreview
+              ? "bg-[#EFE4F6] border-[#1F1F1F] shadow-none"
+              : "bg-white border-neutral-200 shadow-sm"
+          }`}
+        >
+          {isDoodlePreview && (
+            <div className="mb-4 sm:mb-5 flex justify-end">
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 120 70"
+                className="w-24 sm:w-28 h-auto text-[#1F1F1F]"
+                fill="none"
+              >
+                <path
+                  d="M9 52 C24 21, 59 20, 76 44 C86 58, 106 57, 112 42"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                />
+                <circle cx="24" cy="50" r="3.2" fill="currentColor" />
+                <path
+                  d="M62 16 l5 -9 M58 11 l9 1"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                />
+                <path
+                  d="M90 29 q5 -6 11 0 q-6 3 -11 0 z"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+          )}
+
           {/* Match Score Badge */}
-          <div className={`inline-block px-3 sm:px-4 md:px-5 py-1 md:py-2 rounded-full text-xs sm:text-sm md:text-base font-semibold mb-3 sm:mb-4 md:mb-6 ${getMatchColor(currentEvent.matchScore)}`}>
-            {currentEvent.matchScore}% Match
+          <div
+            className={`inline-block px-3 sm:px-4 md:px-5 py-1 md:py-2 rounded-full text-xs sm:text-sm md:text-base font-semibold mb-3 sm:mb-4 md:mb-6 ${
+              isDoodlePreview
+                ? "border border-[#1F1F1F] text-[#1F1F1F] bg-transparent"
+                : getMatchColor(currentEvent.matchScore)
+            }`}
+          >
+            {isDoodlePreview ? "Curated pick" : `${currentEvent.matchScore}% Match`}
           </div>
 
           {/* Event Title */}
-          <h1 className="text-2xl sm:text-3xl md:text-4xl font-serif mt-2">{currentEvent.title}</h1>
+          <h1
+            className={`text-2xl sm:text-3xl md:text-4xl font-serif mt-2 ${
+              isDoodlePreview ? "text-[#1F1F1F]" : ""
+            }`}
+          >
+            {currentEvent.title}
+          </h1>
 
           {/* Event Meta */}
-          <p className="text-neutral-700 mt-2 sm:mt-3 text-xs sm:text-sm wrap-break-word">
+          <p
+            className={`mt-2 sm:mt-3 text-xs sm:text-sm break-words ${
+              isDoodlePreview ? "text-[#2E2E2E]" : "text-neutral-700"
+            }`}
+          >
             <span className="block sm:inline">{currentEvent.location.name}</span>
             <span className="hidden sm:inline"> · </span>
             <span className="block sm:inline">{formatTime(currentEvent.startTime)}</span>
@@ -141,29 +195,60 @@ export default function Recommendations() {
           </p>
 
           {/* Why This Event */}
-          <div className="mt-4 sm:mt-6 p-3 sm:p-4 bg-neutral-50 rounded-lg sm:rounded-xl border border-neutral-200">
-            <p className="text-xs sm:text-sm text-neutral-700 leading-relaxed">
+          <div
+            className={`mt-4 sm:mt-6 p-3 sm:p-4 rounded-lg sm:rounded-xl ${
+              isDoodlePreview
+                ? "bg-[#F6EFFB] border border-[#1F1F1F]/60"
+                : "bg-neutral-50 border border-neutral-200"
+            }`}
+          >
+            <p
+              className={`text-xs sm:text-sm leading-relaxed ${
+                isDoodlePreview ? "text-[#2E2E2E]" : "text-neutral-700"
+              }`}
+            >
               <span className="font-semibold">Why you:</span> You're interested in {currentEvent.category.toLowerCase()}, it fits your time, and you're nearby.
             </p>
           </div>
 
           {/* Event Description */}
-          <p className="mt-4 sm:mt-6 text-sm sm:text-base text-neutral-700 leading-relaxed">{currentEvent.description}</p>
+          <p
+            className={`mt-4 sm:mt-6 text-sm sm:text-base leading-relaxed ${
+              isDoodlePreview ? "text-[#2E2E2E]" : "text-neutral-700"
+            }`}
+          >
+            {currentEvent.description}
+          </p>
 
           {/* Attendee Count */}
           <div className="mt-4 sm:mt-6 flex items-center gap-2">
-            <span className="inline-block w-5 h-5 sm:w-6 sm:h-6 bg-[#57068C] rounded-full shrink-0"></span>
-            <p className="text-xs sm:text-sm text-neutral-600">
-              <span className="font-semibold text-neutral-900">{currentEvent.attendeeCount}</span> people going
+            <span
+              className={`inline-flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6 rounded-full flex-shrink-0 text-[10px] sm:text-xs ${
+                isDoodlePreview
+                  ? "border border-[#1F1F1F] text-[#1F1F1F]"
+                  : "bg-[#57068C] text-white"
+              }`}
+            >
+              {isDoodlePreview ? "✦" : ""}
+            </span>
+            <p className={`text-xs sm:text-sm ${isDoodlePreview ? "text-[#2E2E2E]" : "text-neutral-600"}`}>
+              <span className={`font-semibold ${isDoodlePreview ? "text-[#1F1F1F]" : "text-neutral-900"}`}>
+                {currentEvent.attendeeCount}
+              </span>{" "}
+              people going
             </p>
           </div>
 
           {/* CTA Button */}
-          <div className="mt-6 sm:mt-8 grid gap-2 sm:gap-3">
-            <button className="w-full bg-[#57068C] text-white py-3 sm:py-4 rounded-full font-medium hover:opacity-90 transition text-sm sm:text-base">
-              I'm interested
-            </button>
-          </div>
+          <button
+            className={`mt-6 sm:mt-8 w-full py-3 sm:py-4 rounded-full font-medium transition text-sm sm:text-base ${
+              isDoodlePreview
+                ? "bg-[#57068C] text-white border border-[#1F1F1F]"
+                : "bg-[#57068C] text-white hover:opacity-90"
+            }`}
+          >
+            I'm interested
+          </button>
 
           {lastRegisteredEventId === currentEvent.id && (
             <p className="mt-3 text-xs sm:text-sm text-green-700 bg-green-50 border border-green-200 rounded-xl px-3 py-2">
