@@ -21,7 +21,7 @@ export default function Home() {
           </p>
 
           <div className="bg-white rounded-3xl p-6 shadow-sm border border-neutral-200">
-            <p className="text-sm text-[#7A5A45] font-semibold">
+            <p className="text-sm text-[#57068C] font-semibold">
               Best match right now
             </p>
 
@@ -38,7 +38,7 @@ export default function Home() {
               current availability.
             </p>
 
-            <button className="mt-8 w-full bg-[#7A5A45] text-white py-4 rounded-2xl font-medium">
+            <button className="mt-8 w-full bg-[#57068C] text-white py-4 rounded-full font-medium tracking-wide">
               Take me there
             </button>
           </div>
@@ -52,28 +52,39 @@ export default function Home() {
   }
 
   return (
-    <main className="min-h-screen bg-neutral-100 flex flex-col items-center justify-between py-16 px-6">
+    <main className="min-h-screen bg-neutral-100 flex flex-col items-center justify-between py-10 px-6">
       
-      {/* Logo */}
-      <div className="text-2xl font-serif tracking-wide">
-        FLÂNO <span className="text-neutral-400 text-base">@ NYU</span>
+      {/* Comic Banner */}
+      <div className="w-full h-28 relative overflow-hidden rounded-xl mb-6 border border-neutral-200">
+        <img
+          src="/comic.png"
+          className="w-full h-full object-cover opacity-50"
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/60 to-transparent" />
       </div>
 
-      {/* Center */}
-      <div className="flex flex-col items-center gap-8 text-center">
+      {/* Logo */}
+      <div className="text-2xl font-serif tracking-wide">
+        FLÂNO <span className="text-[#57068C] text-base">@ NYU</span>
+      </div>
+
+      {/* Center Content */}
+      <div className="flex flex-col items-center gap-8 text-center mt-12">
         
-        <h1 className="text-4xl font-serif">Your next best move at NYU.</h1>
+        <h1 className="text-5xl font-serif leading-tight">
+          Your next best move at NYU.
+        </h1>
 
         <button
           onClick={() => setStarted(true)}
-          className="bg-[#7A5A45] text-white px-8 py-4 rounded-2xl text-lg font-medium hover:opacity-90 transition"
+          className="bg-[#57068C] text-white px-10 py-4 rounded-full text-lg font-medium tracking-wide hover:opacity-90 transition"
         >
           I’m free now
         </button>
       </div>
 
       {/* Footer */}
-      <p className="text-sm text-neutral-400">
+      <p className="text-sm text-neutral-400 mt-10">
         Real-time campus matching
       </p>
 
