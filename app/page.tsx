@@ -42,11 +42,11 @@ export default function Home() {
       {/* Center */}
       <div className="flex flex-col items-center gap-8 sm:gap-10 md:gap-12 text-center max-w-5xl">
         
-        <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-serif leading-tight">
+        <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-serif leading-tight text-neutral-900">
           Your next best move at NYU.
         </h1>
 
-        <p className="text-neutral-500 text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed">
+        <p className="text-neutral-700 text-sm sm:text-base md:text-lg lg:text-xl leading-relaxed">
           Instantly match with the best thing to do on campus right now.
         </p>
 
@@ -59,7 +59,7 @@ export default function Home() {
       </div>
 
       {/* Footer */}
-      <p className="text-xs sm:text-sm md:text-base text-neutral-400">
+      <p className="text-xs sm:text-sm md:text-base text-neutral-600">
         Real-time campus matching
       </p>
 

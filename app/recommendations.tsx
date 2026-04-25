@@ -37,7 +37,7 @@ export default function Recommendations() {
             <div className="h-12 bg-neutral-200 rounded-2xl"></div>
             <div className="h-32 bg-neutral-200 rounded-2xl"></div>
           </div>
-          <p className="text-sm text-neutral-500">Finding perfect events for you...</p>
+          <p className="text-sm text-neutral-700">Finding perfect events for you...</p>
         </section>
       </main>
     );
@@ -97,17 +97,17 @@ export default function Recommendations() {
     <main className="min-h-screen bg-neutral-100 px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16 flex flex-col">
       <button
         onClick={() => window.location.href = "/"}
-        className="text-left text-xs sm:text-sm md:text-base text-neutral-500 mb-6 sm:mb-10 md:mb-12"
+        className="text-left text-xs sm:text-sm md:text-base text-neutral-700 mb-6 sm:mb-10 md:mb-12"
       >
         ← back
       </button>
 
       <section className="max-w-md md:max-w-2xl lg:max-w-4xl mx-auto w-full flex flex-col gap-4 sm:gap-6 md:gap-8">
         <div>
-          <p className="text-xs sm:text-sm md:text-base text-neutral-500">
+          <p className="text-xs sm:text-sm md:text-base text-neutral-700">
             ✨ FLANO picked your next move
           </p>
-          <p className="text-xs sm:text-sm md:text-base text-neutral-400 mt-1">
+          <p className="text-xs sm:text-sm md:text-base text-neutral-600 mt-1">
             {currentEventIndex + 1} of {events.length} recommendations
           </p>
         </div>
@@ -123,7 +123,7 @@ export default function Recommendations() {
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-serif mt-2">{currentEvent.title}</h1>
 
           {/* Event Meta */}
-          <p className="text-neutral-500 mt-2 sm:mt-3 text-xs sm:text-sm break-words">
+          <p className="text-neutral-700 mt-2 sm:mt-3 text-xs sm:text-sm break-words">
             <span className="block sm:inline">{currentEvent.location.name}</span>
             <span className="hidden sm:inline"> · </span>
             <span className="block sm:inline">{formatTime(currentEvent.startTime)}</span>

@@ -148,7 +148,7 @@ export default function Onboarding({
       <main className="min-h-screen bg-neutral-100 px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16 flex flex-col">
         <section className="max-w-md md:max-w-2xl lg:max-w-4xl mx-auto w-full flex flex-col gap-6 sm:gap-8 md:gap-10">
           <div>
-            <p className="text-xs sm:text-sm md:text-base text-neutral-500 mb-2">Step 1 of 3</p>
+            <p className="text-xs sm:text-sm md:text-base text-neutral-700 mb-2">Step 1 of 3</p>
             <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-serif">Let's find what's nearby</h1>
           </div>
 
@@ -179,7 +179,7 @@ export default function Onboarding({
               <p className="text-sm sm:text-base md:text-lg text-neutral-600">
                 We'll use your location to find events near you
               </p>
-              <p className="text-xs sm:text-sm md:text-base text-neutral-400 mt-2">
+              <p className="text-xs sm:text-sm md:text-base text-neutral-600 mt-2">
                 Your location is private and only used for matching
               </p>
             </div>
@@ -215,7 +215,7 @@ export default function Onboarding({
               </button>
             </div>
 
-            <p className="text-xs sm:text-sm md:text-base text-neutral-400 text-center px-2">
+            <p className="text-xs sm:text-sm md:text-base text-neutral-600 text-center px-2">
               You can change this anytime in settings
             </p>
           </div>
@@ -230,9 +230,9 @@ export default function Onboarding({
       <main className="min-h-screen bg-neutral-100 px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16 flex flex-col">
         <section className="max-w-md md:max-w-2xl lg:max-w-4xl mx-auto w-full flex flex-col gap-6 sm:gap-8 md:gap-10">
           <div>
-            <p className="text-xs sm:text-sm md:text-base text-neutral-500 mb-2">Step 2 of 3</p>
+            <p className="text-xs sm:text-sm md:text-base text-neutral-700 mb-2">Step 2 of 3</p>
             <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-serif">What are you into?</h1>
-            <p className="text-neutral-500 mt-2 text-xs sm:text-sm md:text-base">
+            <p className="text-neutral-700 mt-2 text-xs sm:text-sm md:text-base">
               Select at least one category (or let us surprise you!)
             </p>
           </div>
@@ -261,7 +261,7 @@ export default function Onboarding({
 
           {/* Category Grid */}
           <div>
-            <p className="text-xs md:text-sm text-neutral-500 mb-2 sm:mb-3 md:mb-4">BROWSE BY INTEREST</p>
+            <p className="text-xs md:text-sm text-neutral-700 mb-2 sm:mb-3 md:mb-4">BROWSE BY INTEREST</p>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
               {INTEREST_OPTIONS.map((interest) => (
                 <button
@@ -320,9 +320,9 @@ export default function Onboarding({
       <main className="min-h-screen bg-neutral-100 px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16 flex flex-col">
         <section className="max-w-md md:max-w-2xl lg:max-w-4xl mx-auto w-full flex flex-col gap-6 sm:gap-8 md:gap-10">
           <div>
-            <p className="text-xs sm:text-sm md:text-base text-neutral-500 mb-2">Step 3 of 3</p>
+            <p className="text-xs sm:text-sm md:text-base text-neutral-700 mb-2">Step 3 of 3</p>
             <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-serif">How much time do you have?</h1>
-            <p className="text-neutral-500 mt-2 text-xs sm:text-sm md:text-base">
+            <p className="text-neutral-700 mt-2 text-xs sm:text-sm md:text-base">
               We'll automatically search {getRadiusDescription(getAutoRadius(DURATION_OPTIONS[1].value))} based on your availability
             </p>
           </div>
@@ -335,14 +335,14 @@ export default function Onboarding({
                 className="w-full bg-white border-2 border-neutral-200 rounded-xl sm:rounded-2xl md:rounded-3xl p-3 sm:p-4 md:p-6 text-left hover:border-[#57068C] transition group"
               >
                 <p className="font-medium text-sm sm:text-base md:text-lg text-neutral-900">{option.label}</p>
-                <p className="text-xs sm:text-sm md:text-base text-neutral-500 mt-1">
+                <p className="text-xs sm:text-sm md:text-base text-neutral-600 mt-1">
                   🔍 Searching {getRadiusDescription(getAutoRadius(option.value))}
                 </p>
               </button>
             ))}
           </div>
 
-          <p className="text-xs sm:text-sm md:text-base text-neutral-400 text-center px-2">
+          <p className="text-xs sm:text-sm md:text-base text-neutral-600 text-center px-2">
             ✨ Smart radius automatically adjusts based on your time
           </p>
         </section>
