@@ -390,6 +390,9 @@ export default function Recommendations() {
           isOpen={showAIAgent}
           events={events}
           currentEvent={currentEvent}
+          registeredEventIds={Object.keys(registeredByEventId)}
+          userLocation={location}
+          userPreferences={preferences}
           onClose={() => setShowAIAgent(false)}
           onAutoRegister={(eventId) => {
             setRegisteredByEventId((prev) =>

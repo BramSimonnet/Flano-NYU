@@ -33,7 +33,7 @@ export default function Home() {
   // Landing page
   return (
     <main className="min-h-screen bg-[#F5F2EA] flex flex-col items-center px-6 py-10">
-      <div className="w-full max-w-4xl rounded-[2rem] border border-[#1F1F1F] bg-[#FEF7FB] px-6 sm:px-10 py-6 sm:py-8 flex flex-col items-center text-center">
+      <div className="w-full max-w-4xl rounded-[2rem] border border-neutral-200 bg-[#FEF7FB] px-6 sm:px-10 py-6 sm:py-8 flex flex-col items-center text-center shadow-sm">
         {/* Logo */}
         <div className="mb-2">
           <img

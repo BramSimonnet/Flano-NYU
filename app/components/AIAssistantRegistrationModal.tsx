@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import type { FormEvent } from "react";
-import type { Event } from "../types";
+import type { Event, UserLocation, UserPreferences } from "../types";
 
 type ChatRole = "assistant" | "user";
 
@@ -28,6 +28,9 @@ export default function AIAssistantRegistrationModal({
   isOpen,
   events,
   currentEvent,
+  registeredEventIds,
+  userLocation,
+  userPreferences,
   onClose,
   onAutoRegister,
   onSelectEvent,
@@ -35,13 +38,16 @@ export default function AIAssistantRegistrationModal({
   isOpen: boolean;
   events: Event[];
   currentEvent: Event;
+  registeredEventIds: string[];
+  userLocation: UserLocation | null;
+  userPreferences: UserPreferences | null;
   onClose: () => void;
   onAutoRegister: (eventId: string) => void;
   onSelectEvent: (index: number) => void;
 }) {
   const [messages, setMessages] = useState<ChatMessage[]>([
     createAssistantMessage(
-      "Hi! I'm your FLANO AI assistant. I can search events and auto-register you from chat.\nTry: 'I wanna register for a hackathon near me' or 'register me for the best event right now'.\nCurrent event pool is now clickable below. Tap any event to jump there."
+      "Hi! I'm your FLANO AI assistant. I can search events, summarize your plan, and auto-register from chat.\nTry: 'What other events am I registered for?', 'register me for a hackathon near me', or 'what starts the soonest?'.\nCurrent event pool is clickable below - tap any event to jump there."
     ),
   ]);
   const [input, setInput] = useState("");
@@ -50,6 +56,105 @@ export default function AIAssistantRegistrationModal({
 
   const addAssistant = (text: string) => {
     setMessages((prev) => [...prev, createAssistantMessage(text)]);
+  };
+
+  const getDistanceKm = (event: Event): number | null => {
+    if (!userLocation) return null;
+    const toRadians = (value: number) => (value * Math.PI) / 180;
+    const earthRadiusKm = 6371;
+    const latDelta = toRadians(event.location.latitude - userLocation.latitude);
+    const lonDelta = toRadians(event.location.longitude - userLocation.longitude);
+    const lat1 = toRadians(userLocation.latitude);
+    const lat2 = toRadians(event.location.latitude);
+    const a =
+      Math.sin(latDelta / 2) ** 2 +
+      Math.sin(lonDelta / 2) ** 2 * Math.cos(lat1) * Math.cos(lat2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return earthRadiusKm * c;
+  };
+
+  const getDistanceText = (event: Event): string => {
+    const distanceKm = getDistanceKm(event);
+    if (distanceKm === null) return "distance unavailable";
+    if (distanceKm < 1) return `${Math.round(distanceKm * 1000)} m away`;
+    return `${distanceKm.toFixed(2)} km away`;
+  };
+
+  const getMinutesUntilStart = (event: Event): number => {
+    const diffMs = event.startTime.getTime() - Date.now();
+    return Math.max(0, Math.floor(diffMs / (1000 * 60)));
+  };
+
+  const getStartText = (event: Event): string => {
+    const minutes = getMinutesUntilStart(event);
+    if (minutes < 1) return "starting now";
+    if (minutes < 60) return `starts in ${minutes} min`;
+    const hours = Math.floor(minutes / 60);
+    return `starts in ${hours}h ${minutes % 60}m`;
+  };
+
+  const getRegisteredEvents = (): Event[] =>
+    events.filter((event) => registeredEventIds.includes(event.id));
+
+  const findEventByQuery = (query: string): Event | undefined => {
+    const text = query.toLowerCase();
+    const exact = events.find((event) => {
+      const haystack = `${event.title} ${event.category} ${event.location.name}`.toLowerCase();
+      return haystack.includes(text) || text.includes(event.title.toLowerCase());
+    });
+    if (exact) return exact;
+
+    const queryTokens = text.split(/[^a-z0-9]+/).filter((token) => token.length > 2);
+    if (queryTokens.length === 0) return undefined;
+
+    const scored = events
+      .map((event) => {
+        const haystack = `${event.title} ${event.category} ${event.location.name}`.toLowerCase();
+        const score = queryTokens.reduce(
+          (count, token) => count + (haystack.includes(token) ? 1 : 0),
+          0
+        );
+        return { event, score };
+      })
+      .sort((a, b) => b.score - a.score);
+
+    if ((scored[0]?.score ?? 0) > 0) {
+      return scored[0].event;
+    }
+
+    return undefined;
+  };
+
+  const getTopMatchEvent = (): Event => {
+    return [...events].sort((a, b) => b.matchScore - a.matchScore)[0] ?? currentEvent;
+  };
+
+  const getSoonestEvent = (): Event => {
+    return [...events].sort((a, b) => a.startTime.getTime() - b.startTime.getTime())[0] ?? currentEvent;
+  };
+
+  const getMostPopularEvent = (): Event => {
+    return [...events].sort((a, b) => b.attendeeCount - a.attendeeCount)[0] ?? currentEvent;
+  };
+
+  const getLeastPopularEvent = (): Event => {
+    return [...events].sort((a, b) => a.attendeeCount - b.attendeeCount)[0] ?? currentEvent;
+  };
+
+  const getTravelEstimateText = (event: Event): string => {
+    const distanceKm = getDistanceKm(event);
+    if (distanceKm === null) return "I can't estimate travel time without your location.";
+    const walkingMinutes = Math.max(2, Math.round(distanceKm * 12));
+    return `Estimated walking time is about ${walkingMinutes} minutes (${getDistanceText(event)}).`;
+  };
+
+  const getAvailabilityFitText = (): string => {
+    if (!userPreferences) return "I don't have your preference window yet.";
+    const fittingEvents = events.filter((event) => event.duration <= userPreferences.maxDuration);
+    if (fittingEvents.length === 0) {
+      return `None of the current options fully fit your ${userPreferences.maxDuration}-minute availability window.`;
+    }
+    return `${fittingEvents.length} out of ${events.length} events fit your ${userPreferences.maxDuration}-minute availability.`;
   };
 
   const pickBestEventFromIntent = (query: string): Event => {
@@ -92,6 +197,165 @@ export default function AIAssistantRegistrationModal({
 
     const lower = value.toLowerCase();
 
+    if (
+      /(what|which|show|list).*(registered|registration|signed up)|am i registered/.test(lower)
+    ) {
+      const registeredEvents = getRegisteredEvents();
+      if (registeredEvents.length === 0) {
+        addAssistant(
+          "You are not registered for any events yet. If you want, I can register you for your top match right now."
+        );
+        return;
+      }
+
+      const registeredList = registeredEvents
+        .map(
+          (event, index) =>
+            `${index + 1}. ${event.title} (${event.location.name}, ${getStartText(event)})`
+        )
+        .join("\n");
+      addAssistant(`You're currently registered for:\n${registeredList}`);
+      return;
+    }
+
+    if (/(how far|distance|how close|near me|nearby)/.test(lower)) {
+      const referenced = findEventByQuery(value) ?? currentEvent;
+      addAssistant(
+        `${referenced.title} is ${getDistanceText(referenced)} from your current location. ${getTravelEstimateText(
+          referenced
+        )}`
+      );
+      return;
+    }
+
+    if (/(what|which).*(soonest|next|earliest)|starts? first/.test(lower)) {
+      const soonestEvent = getSoonestEvent();
+      addAssistant(
+        `The soonest event is ${soonestEvent.title} at ${soonestEvent.location.name} - ${getStartText(
+          soonestEvent
+        )}.`
+      );
+      return;
+    }
+
+    if (/(best|top).*(match|option)|highest match/.test(lower)) {
+      const bestMatch = getTopMatchEvent();
+      addAssistant(
+        `Your top match is ${bestMatch.title} (${bestMatch.matchScore}% match) at ${bestMatch.location.name}.`
+      );
+      return;
+    }
+
+    if (/(why|reason).*(match|recommended|this event)|why this/.test(lower)) {
+      const referenced = findEventByQuery(value) ?? currentEvent;
+      addAssistant(
+        `${referenced.title} is recommended because it has a ${referenced.matchScore}% match, is ${getDistanceText(
+          referenced
+        )}, and ${getStartText(referenced)}.`
+      );
+      return;
+    }
+
+    if (/(where|location).*(is|for)|where is/.test(lower)) {
+      const referenced = findEventByQuery(value) ?? currentEvent;
+      addAssistant(
+        `${referenced.title} is at ${referenced.location.name}. It ${getStartText(
+          referenced
+        )} and lasts ${referenced.duration} minutes.`
+      );
+      return;
+    }
+
+    if (/(organizer|who.*host|who.*running|hosted by)/.test(lower)) {
+      const referenced = findEventByQuery(value) ?? currentEvent;
+      addAssistant(`${referenced.title} is organized by ${referenced.organizer}.`);
+      return;
+    }
+
+    if (/(description|details|tell me more|about this event|summary)/.test(lower)) {
+      const referenced = findEventByQuery(value) ?? currentEvent;
+      addAssistant(
+        `${referenced.title}: ${referenced.description}\nCategory: ${referenced.category}\nOrganizer: ${referenced.organizer}`
+      );
+      return;
+    }
+
+    if (/(how long|duration|how much time)/.test(lower)) {
+      const referenced = findEventByQuery(value) ?? currentEvent;
+      addAssistant(
+        `${referenced.title} takes about ${referenced.duration} minutes and ${getStartText(
+          referenced
+        )}.`
+      );
+      return;
+    }
+
+    if (/(category|type of event|what kind)/.test(lower)) {
+      const referenced = findEventByQuery(value) ?? currentEvent;
+      addAssistant(`${referenced.title} is in the ${referenced.category} category.`);
+      return;
+    }
+
+    if (/(attendees|attendance|people going|how many people|popular)/.test(lower)) {
+      const referenced = findEventByQuery(value);
+      if (referenced) {
+        addAssistant(
+          `${referenced.title} currently has ${referenced.attendeeCount} people going.`
+        );
+        return;
+      }
+
+      const mostPopular = getMostPopularEvent();
+      const leastPopular = getLeastPopularEvent();
+      addAssistant(
+        `Most popular right now: ${mostPopular.title} (${mostPopular.attendeeCount} attendees).\nSmaller group option: ${leastPopular.title} (${leastPopular.attendeeCount} attendees).`
+      );
+      return;
+    }
+
+    if (/(fit|within|available time|time window|max duration)/.test(lower)) {
+      addAssistant(getAvailabilityFitText());
+      return;
+    }
+
+    if (/(compare|difference|vs|versus)/.test(lower)) {
+      const bestMatch = getTopMatchEvent();
+      const soonest = getSoonestEvent();
+      addAssistant(
+        `Quick comparison:\nTop match: ${bestMatch.title} (${bestMatch.matchScore}% match, ${getDistanceText(
+          bestMatch
+        )})\nSoonest: ${soonest.title} (${getStartText(soonest)}, ${soonest.duration} min)`
+      );
+      return;
+    }
+
+    if (/(categories|types|kind of events|what categories)/.test(lower)) {
+      const categories = Array.from(new Set(events.map((event) => event.category))).join(", ");
+      addAssistant(`Current categories in your feed: ${categories}.`);
+      return;
+    }
+
+    if (/(events in|anything in|show.*category)/.test(lower)) {
+      const categoryMatch = Array.from(new Set(events.map((event) => event.category))).find(
+        (category) => lower.includes(category.toLowerCase())
+      );
+      if (!categoryMatch) {
+        addAssistant("Tell me a category name and I can list matching events.");
+        return;
+      }
+
+      const categoryEvents = events.filter((event) => event.category === categoryMatch).slice(0, 3);
+      if (categoryEvents.length === 0) {
+        addAssistant(`No events found in ${categoryMatch} right now.`);
+        return;
+      }
+      const list = categoryEvents
+        .map((event) => `- ${event.title} (${event.location.name}, ${getStartText(event)})`)
+        .join("\n");
+      addAssistant(`Here are ${categoryMatch} events:\n${list}`);
+      return;
+    }
+
     if (/(show|list|what).*(event|options)/.test(lower)) {
       addAssistant("Here are your current matches. Tap any event button below to jump there.");
       return;
@@ -111,7 +375,7 @@ export default function AIAssistantRegistrationModal({
     }
 
     addAssistant(
-      "I can help with registration. Try saying: 'register me for a hackathon near me' or 'show my events'."
+      "I can answer event details like distance, start time, match score, attendees, duration, location, organizer, and registration status.\nTry:\n- How far is this event?\n- Why is this recommended?\n- Who is organizing this?\n- What other events am I registered for?\n- Compare my top match vs soonest event."
     );
   };
 
