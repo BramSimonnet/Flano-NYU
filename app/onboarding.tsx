@@ -145,59 +145,80 @@ export default function Onboarding({
   // Location Step
   if (step === "location") {
     return (
-      <main className="min-h-screen bg-neutral-100 px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16 flex flex-col">
-        <section className="max-w-md md:max-w-2xl lg:max-w-4xl mx-auto w-full flex flex-col gap-6 sm:gap-8 md:gap-10">
+      <main className="min-h-screen bg-[#F5F2EA] px-4 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-12 flex flex-col">
+        <section className="max-w-md md:max-w-2xl lg:max-w-4xl mx-auto w-full flex flex-col gap-4 sm:gap-6 md:gap-8">
           <div>
             <p className="text-xs sm:text-sm md:text-base text-neutral-700 mb-2">Step 1 of 3</p>
-            <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-serif">Let's find what's nearby</h1>
+            <h1 className="text-lg sm:text-xl md:text-3xl lg:text-4xl font-serif">Let's find what's nearby</h1>
           </div>
 
-          <div className="bg-white rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-12 shadow-sm border border-neutral-200 flex flex-col items-center gap-4 sm:gap-6 md:gap-8">
-            <div className="w-14 h-14 sm:w-16 sm:h-16 md:w-24 md:h-24 bg-neutral-100 rounded-full flex items-center justify-center">
-              <svg
-                className="w-7 h-7 sm:w-8 sm:h-8 md:w-12 md:h-12 text-neutral-600"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+          <div className="bg-[#FEF7FB] rounded-2xl sm:rounded-3xl p-3 sm:p-5 md:p-7 shadow-sm border border-neutral-200 flex flex-col gap-6">
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
+              <div>
+                <p className="text-xs sm:text-sm md:text-base text-neutral-600">
+                  We'll use your location to find events near you
+                </p>
+                <p className="text-xs sm:text-sm md:text-base text-neutral-600 mt-2">
+                  Your location is private and only used for matching
+                </p>
+              </div>
+              <button
+                onClick={requestLocation}
+                disabled={loadingLocation}
+                className="bg-[#57068C] text-white px-6 py-3 rounded-full font-medium hover:opacity-90 transition disabled:opacity-50 text-sm sm:text-base md:text-lg"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                />
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                />
-              </svg>
+                {loadingLocation ? "Getting location..." : "Share my location"}
+              </button>
+<<<<<<< HEAD
+=======
             </div>
 
-            <div className="text-center">
-              <p className="text-sm sm:text-base md:text-lg text-neutral-600">
-                We'll use your location to find events near you
-              </p>
-              <p className="text-xs sm:text-sm md:text-base text-neutral-600 mt-2">
-                Your location is private and only used for matching
-              </p>
+            <div className="w-full space-y-2 sm:space-y-2 md:space-y-3">
+              <button
+                onClick={() => {
+                  const mockLocation: UserLocation = {
+                    latitude: 40.7294,
+                    longitude: -73.9965,
+                    accuracy: 20,
+                  };
+                  setLocation(mockLocation);
+                  setStep("interests");
+                }}
+                className="w-full bg-neutral-200 text-neutral-700 py-3 sm:py-4 md:py-5 rounded-full font-medium hover:bg-neutral-300 transition text-sm sm:text-base md:text-lg"
+              >
+                Test with Sample Location
+              </button>
+>>>>>>> 67e61f2 (commit)
             </div>
 
             {locationError && (
-              <div className="w-full bg-red-50 border border-red-200 rounded-xl p-3 sm:p-4 md:p-6">
+              <div className="w-full bg-red-50 border border-red-200 rounded-xl p-2 sm:p-3 md:p-4">
                 <p className="text-xs sm:text-sm md:text-base text-red-700">{locationError}</p>
               </div>
             )}
 
-            <div className="w-full space-y-2 sm:space-y-3 md:space-y-4">
-              <button
-                onClick={requestLocation}
-                disabled={loadingLocation}
-                className="w-full bg-[#57068C] text-white py-3 sm:py-4 md:py-5 rounded-full font-medium hover:opacity-90 transition disabled:opacity-50 text-sm sm:text-base md:text-lg"
-              >
-                {loadingLocation ? "Getting location..." : "Share my location"}
-              </button>
+            <div className="flex justify-center">
+              <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-neutral-100 rounded-full flex items-center justify-center">
+                <svg
+                  className="w-6 h-6 sm:w-7 sm:h-7 md:w-10 md:h-10 text-neutral-600"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                  />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                  />
+                </svg>
+              </div>
             </div>
 
             <p className="text-xs sm:text-sm md:text-base text-neutral-600 text-center px-2">
@@ -212,87 +233,76 @@ export default function Onboarding({
   // Interests Step
   if (step === "interests") {
     return (
-      <main className="min-h-screen bg-neutral-100 px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16 flex flex-col">
-        <section className="max-w-md md:max-w-2xl lg:max-w-4xl mx-auto w-full flex flex-col gap-6 sm:gap-8 md:gap-10">
+      <main className="min-h-screen bg-[#F5F2EA] px-4 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-12 flex flex-col">
+        <section className="max-w-md md:max-w-2xl lg:max-w-4xl mx-auto w-full flex flex-col gap-4 sm:gap-6 md:gap-8">
           <div>
             <p className="text-xs sm:text-sm md:text-base text-neutral-700 mb-2">Step 2 of 3</p>
-            <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-serif">What are you into?</h1>
+            <h1 className="text-lg sm:text-xl md:text-3xl lg:text-4xl font-serif">What are you into?</h1>
             <p className="text-neutral-700 mt-2 text-xs sm:text-sm md:text-base">
               Select at least one category (or let us surprise you!)
             </p>
           </div>
 
-          {/* Surprise Me Button */}
-          <div className="bg-gradient-to-r from-[#57068C] to-[#7B2CBF] rounded-xl sm:rounded-2xl md:rounded-3xl p-3 sm:p-4 md:p-6 text-white">
-            <button
-              onClick={() => {
-                const randomCategories = INTEREST_OPTIONS.sort(
-                  () => Math.random() - 0.5
-                ).slice(0, 3);
-                setPreferences((prev) => ({
-                  ...prev,
-                  interests: randomCategories,
-                }));
-                setStep("duration");
-              }}
-              className="w-full text-left group"
-            >
-              <p className="font-semibold text-sm sm:text-base md:text-lg">✨ Surprise me!</p>
-              <p className="text-xs sm:text-sm md:text-base text-white/80 mt-1">
-                Don't know what you want? Let's explore 3 random categories
-              </p>
-            </button>
-          </div>
-
-          {/* Category Grid */}
-          <div>
-            <p className="text-xs md:text-sm text-neutral-700 mb-2 sm:mb-3 md:mb-4">BROWSE BY INTEREST</p>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
-              {INTEREST_OPTIONS.map((interest) => (
-                <button
-                  key={interest}
-                  onClick={() => toggleInterest(interest)}
-                  className={`p-2 sm:p-3 md:p-4 rounded-lg sm:rounded-xl md:rounded-2xl text-xs sm:text-sm md:text-base font-medium transition ${
-                    preferences.interests.includes(interest)
-                      ? "bg-[#57068C] text-white"
-                      : "bg-white text-neutral-700 border border-neutral-200 hover:border-neutral-300"
-                  }`}
-                >
-                  {interest}
-                </button>
-              ))}
+          <div className="bg-[#FEF7FB] rounded-2xl sm:rounded-3xl p-3 sm:p-5 md:p-7 shadow-sm border border-neutral-200 flex flex-col gap-3 sm:gap-4 md:gap-6">
+            {/* Surprise Me Button */}
+            <div className="bg-gradient-to-r from-[#57068C] to-[#7B2CBF] rounded-xl sm:rounded-2xl md:rounded-3xl p-3 sm:p-4 md:p-6 text-white">
+              <button
+                onClick={() => {
+                  const randomCategories = INTEREST_OPTIONS.sort(
+                    () => Math.random() - 0.5
+                  ).slice(0, 3);
+                  setPreferences((prev) => ({
+                    ...prev,
+                    interests: randomCategories,
+                  }));
+                  setStep("duration");
+                }}
+                className="w-full text-left group"
+              >
+                <p className="font-semibold text-sm sm:text-base md:text-lg">✨ Surprise me!</p>
+                <p className="text-xs sm:text-sm md:text-base text-white/80 mt-1">
+                  Don't know what you want? Let's explore 3 random categories
+                </p>
+              </button>
             </div>
-          </div>
 
-          {/* Action Buttons */}
-          <div className="space-y-2 sm:space-y-3 md:space-y-4">
-            <button
-              onClick={() => setStep("duration")}
-              disabled={preferences.interests.length === 0}
-              className="w-full bg-[#57068C] text-white py-3 sm:py-4 md:py-5 rounded-full font-medium hover:opacity-90 transition disabled:opacity-50 text-sm sm:text-base md:text-lg"
-            >
-              Next
-            </button>
+            {/* Category Grid */}
+            <div>
+              <p className="text-xs md:text-sm text-neutral-700 mb-2 sm:mb-3 md:mb-4">BROWSE BY INTEREST</p>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3 md:gap-4">
+                {INTEREST_OPTIONS.map((interest) => (
+                  <button
+                    key={interest}
+                    onClick={() => toggleInterest(interest)}
+                    className={`p-2 sm:p-3 md:p-4 rounded-lg sm:rounded-xl md:rounded-2xl text-xs sm:text-sm md:text-base font-medium transition ${
+                      preferences.interests.includes(interest)
+                        ? "bg-[#57068C] text-white"
+                        : "bg-white text-neutral-700 border border-neutral-200 hover:border-neutral-300"
+                    }`}
+                  >
+                    {interest}
+                  </button>
+                ))}
+              </div>
+            </div>
 
-            <button
-              onClick={() => {
-                setPreferences((prev) => ({
-                  ...prev,
-                  interests: INTEREST_OPTIONS,
-                }));
-                setStep("duration");
-              }}
-              className="w-full bg-neutral-200 text-neutral-700 py-3 sm:py-4 md:py-5 rounded-full font-medium hover:bg-neutral-300 transition text-sm sm:text-base md:text-lg"
-            >
-              Show me everything
-            </button>
-          </div>
+            {/* Action Buttons */}
+            <div className="space-y-2 sm:space-y-3 md:space-y-4">
+              <button
+                onClick={() => setStep("duration")}
+                disabled={preferences.interests.length === 0}
+                className="w-full bg-[#57068C] text-white py-3 sm:py-4 md:py-5 rounded-full font-medium hover:opacity-90 transition disabled:opacity-50 text-sm sm:text-base md:text-lg"
+              >
+                Next
+              </button>
+            </div>
 
-          {/* Suggestions */}
-          <div className="bg-blue-50 border border-blue-200 rounded-lg sm:rounded-xl md:rounded-2xl p-3 sm:p-4 md:p-6">
-            <p className="text-xs sm:text-sm md:text-base text-blue-900 leading-relaxed">
-              💡 <span className="font-semibold">Tip:</span> Most students are exploring Tech, Sports & Social events right now
-            </p>
+            {/* Suggestions */}
+            <div className="bg-blue-50 border border-blue-200 rounded-lg sm:rounded-xl md:rounded-2xl p-3 sm:p-4 md:p-6">
+              <p className="text-xs sm:text-sm md:text-base text-blue-900 leading-relaxed">
+                💡 <span className="font-semibold">Tip:</span> Most students are exploring Tech, Sports & Social events right now
+              </p>
+            </div>
           </div>
         </section>
       </main>
@@ -302,34 +312,33 @@ export default function Onboarding({
   // Duration Step - Final step
   if (step === "duration") {
     return (
-      <main className="min-h-screen bg-neutral-100 px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16 flex flex-col">
-        <section className="max-w-md md:max-w-2xl lg:max-w-4xl mx-auto w-full flex flex-col gap-6 sm:gap-8 md:gap-10">
+      <main className="min-h-screen bg-[#F5F2EA] px-4 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-12 flex flex-col">
+        <section className="max-w-md md:max-w-2xl lg:max-w-4xl mx-auto w-full flex flex-col gap-4 sm:gap-6 md:gap-8">
           <div>
             <p className="text-xs sm:text-sm md:text-base text-neutral-700 mb-2">Step 3 of 3</p>
-            <h1 className="text-2xl sm:text-3xl md:text-5xl lg:text-6xl font-serif">How much time do you have?</h1>
+            <h1 className="text-lg sm:text-xl md:text-3xl lg:text-4xl font-serif">How much time do you have?</h1>
             <p className="text-neutral-700 mt-2 text-xs sm:text-sm md:text-base">
               We'll automatically search {getRadiusDescription(getAutoRadius(DURATION_OPTIONS[1].value))} based on your availability
             </p>
           </div>
 
-          <div className="space-y-2 sm:space-y-3 md:space-y-4">
-            {DURATION_OPTIONS.map((option) => (
-              <button
-                key={option.value}
-                onClick={() => handleDurationSelect(option.value)}
-                className="w-full bg-white border-2 border-neutral-200 rounded-xl sm:rounded-2xl md:rounded-3xl p-3 sm:p-4 md:p-6 text-left hover:border-[#57068C] transition group"
-              >
-                <p className="font-medium text-sm sm:text-base md:text-lg text-neutral-900">{option.label}</p>
-                <p className="text-xs sm:text-sm md:text-base text-neutral-600 mt-1">
-                  🔍 Searching {getRadiusDescription(getAutoRadius(option.value))}
-                </p>
-              </button>
-            ))}
-          </div>
+          <div className="bg-[#FEF7FB] rounded-2xl sm:rounded-3xl p-3 sm:p-5 md:p-7 shadow-sm border border-neutral-200 flex flex-col gap-3 sm:gap-4 md:gap-6">
+            <div className="space-y-2 sm:space-y-3 md:space-y-4">
+              {DURATION_OPTIONS.map((option) => (
+                <button
+                  key={option.value}
+                  onClick={() => handleDurationSelect(option.value)}
+                  className="w-full bg-white border-2 border-neutral-200 rounded-xl sm:rounded-2xl md:rounded-3xl p-3 sm:p-4 md:p-6 text-left hover:border-[#57068C] transition group"
+                >
+                  <p className="font-medium text-sm sm:text-base md:text-lg text-neutral-900">{option.label}</p>
+                </button>
+              ))}
+            </div>
 
-          <p className="text-xs sm:text-sm md:text-base text-neutral-600 text-center px-2">
-            ✨ Smart radius automatically adjusts based on your time
-          </p>
+            <p className="text-xs sm:text-sm md:text-base text-neutral-600 text-center px-2">
+              ✨ Smart radius automatically adjusts based on your time
+            </p>
+          </div>
         </section>
       </main>
     );

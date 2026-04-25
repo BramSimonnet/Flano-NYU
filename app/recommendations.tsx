@@ -37,7 +37,7 @@ export default function Recommendations() {
 
   if (loading) {
     return (
-      <main className="min-h-screen bg-neutral-100 px-6 py-12 flex flex-col">
+      <main className="min-h-screen bg-[#F5F2EA] px-4 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-12 flex flex-col">
         <button
           onClick={() => window.location.href = "/"}
           className="text-left text-sm text-neutral-500 mb-10"
@@ -45,20 +45,22 @@ export default function Recommendations() {
           ← back
         </button>
 
-        <section className="max-w-md mx-auto w-full flex flex-col gap-6 items-center justify-center min-h-100">
+        <div className="bg-[#FEF7FB] rounded-2xl sm:rounded-3xl p-3 sm:p-5 md:p-7 shadow-sm border border-neutral-200">
+          <section className="max-w-md mx-auto w-full flex flex-col gap-6 items-center justify-center min-h-100">
           <div className="animate-pulse space-y-4 w-full">
             <div className="h-12 bg-neutral-200 rounded-2xl"></div>
             <div className="h-32 bg-neutral-200 rounded-2xl"></div>
           </div>
           <p className="text-sm text-neutral-700">Finding perfect events for you...</p>
         </section>
+        </div>
       </main>
     );
   }
 
   if (events.length === 0) {
     return (
-      <main className="min-h-screen bg-neutral-100 px-6 py-12 flex flex-col">
+      <main className="min-h-screen bg-[#F5F2EA] px-4 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-12 flex flex-col">
         <button
           onClick={() => window.location.href = "/"}
           className="text-left text-sm text-neutral-500 mb-10"
@@ -66,7 +68,8 @@ export default function Recommendations() {
           ← back
         </button>
 
-        <section className="max-w-md mx-auto w-full flex flex-col gap-6 items-center justify-center min-h-100">
+        <div className="bg-[#FEF7FB] rounded-2xl sm:rounded-3xl p-3 sm:p-5 md:p-7 shadow-sm border border-neutral-200">
+          <section className="max-w-md mx-auto w-full flex flex-col gap-6 items-center justify-center min-h-100">
           <div className="text-center">
             <p className="text-3xl mb-2">😴</p>
             <h2 className="text-2xl font-serif mb-2">No events right now</h2>
@@ -81,6 +84,7 @@ export default function Recommendations() {
             Adjust preferences
           </button>
         </section>
+        </div>
       </main>
     );
   }
@@ -167,7 +171,7 @@ export default function Recommendations() {
   };
 
   return (
-    <main className="min-h-screen bg-neutral-100 px-4 sm:px-6 lg:px-8 py-8 sm:py-12 md:py-16 flex flex-col">
+    <main className="min-h-screen bg-[#F5F2EA] px-4 sm:px-6 lg:px-8 py-6 sm:py-8 md:py-12 flex flex-col">
       <button
         onClick={() => window.location.href = "/"}
         className="text-left text-xs sm:text-sm md:text-base text-neutral-700 mb-6 sm:mb-10 md:mb-12"
@@ -175,7 +179,8 @@ export default function Recommendations() {
         ← back
       </button>
 
-      <section className="max-w-md md:max-w-2xl lg:max-w-6xl mx-auto w-full flex flex-col gap-4 sm:gap-6 md:gap-8">
+      <div className="bg-[#FEF7FB] rounded-2xl sm:rounded-3xl p-3 sm:p-5 md:p-7 shadow-sm border border-neutral-200">
+        <section className="max-w-md md:max-w-2xl lg:max-w-6xl mx-auto w-full flex flex-col gap-3 sm:gap-4 md:gap-6">
         <div>
           <p className="text-xs sm:text-sm md:text-base text-neutral-700">
             ✨ FLANO picked your next move
@@ -204,7 +209,6 @@ export default function Recommendations() {
             ref={eventCardRef}
             className="bg-white rounded-2xl sm:rounded-3xl md:rounded-4xl p-4 sm:p-6 md:p-10 shadow-sm border border-neutral-200"
           >
-            {/* Match Score Badge */}
             <div className={`inline-block px-3 sm:px-4 md:px-5 py-1 md:py-2 rounded-full text-xs sm:text-sm md:text-base font-semibold mb-3 sm:mb-4 md:mb-6 ${getMatchColor(currentEvent.matchScore)}`}>
               {currentEvent.matchScore}% Match
             </div>
@@ -345,9 +349,10 @@ export default function Recommendations() {
 
         {/* Summary */}
         <p className="text-center text-xs sm:text-sm text-neutral-400 px-2">
-          🎯 Personalized for your next {preferences?.maxDuration} minutes
+          Personalized for your next {preferences?.maxDuration} minutes
         </p>
       </section>
+      </div>
 
       <AIAssistantRegistrationModal
         isOpen={showAIAgent}
