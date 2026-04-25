@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Playfair_Display } from "next/font/google";
 import "./globals.css";
+import { OnboardingProvider } from "./contexts/OnboardingContext";
 
 const playfair = Playfair_Display({
   subsets: ["latin"],
@@ -19,7 +20,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={playfair.className}>{children}</body>
+      <body className={`${playfair.className} h-full antialiased`}>
+        <OnboardingProvider>{children}</OnboardingProvider>
+      </body>
     </html>
   );
 }
