@@ -190,12 +190,6 @@ export default function Recommendations() {
       <div className="bg-[#FEF7FB] rounded-2xl sm:rounded-3xl p-3 sm:p-5 md:p-7 shadow-sm border border-neutral-200">
         <section className="max-w-md md:max-w-2xl lg:max-w-6xl mx-auto w-full flex flex-col gap-3 sm:gap-4 md:gap-6">
         <div>
-          <p className="text-xs sm:text-sm md:text-base text-neutral-700">
-            ✨ FLANO picked your next move
-          </p>
-          <p className="text-xs sm:text-sm md:text-base text-neutral-600 mt-1">
-            {currentEventIndex + 1} of {events.length} recommendations
-          </p>
           {registeredEvents.length > 0 && (
             <div className="mt-3 rounded-2xl border border-green-200 bg-green-50 px-3 py-2 sm:px-4">
               <p className="text-xs sm:text-sm font-medium text-green-800">
@@ -203,20 +197,29 @@ export default function Recommendations() {
               </p>
             </div>
           )}
-          <button
-            onClick={() => setShowAIAgent(true)}
-            className="mt-3 inline-flex items-center gap-2 rounded-full border border-[#57068C] bg-white px-4 py-2 text-xs sm:text-sm font-medium text-[#57068C] hover:bg-[#57068C]/10 transition"
-          >
-            ✨ AI assisted chat
-          </button>
         </div>
 
         <div className="grid gap-4 sm:gap-6 md:gap-8 lg:grid-cols-[minmax(0,1fr)_20rem] xl:grid-cols-[minmax(0,1fr)_24rem]">
           {/* Main Event Card */}
-          <div
-            ref={eventCardRef}
-            className="bg-white rounded-2xl sm:rounded-3xl md:rounded-4xl p-4 sm:p-6 md:p-10 shadow-sm border border-neutral-200"
-          >
+          <div className="flex flex-col gap-2 sm:gap-3">
+            <div className="flex items-start justify-between gap-3">
+              <p className="text-xs sm:text-sm md:text-base text-neutral-700">
+                ✨ FLANO picked your next move
+              </p>
+              <button
+                onClick={() => setShowAIAgent(true)}
+                className="inline-flex items-center gap-2 rounded-full border border-[#57068C] bg-white px-4 py-2 text-xs sm:text-sm font-medium text-[#57068C] hover:bg-[#57068C]/10 transition shrink-0"
+              >
+                ✨ AI assisted chat
+              </button>
+            </div>
+            <div
+              ref={eventCardRef}
+              className="bg-white rounded-2xl sm:rounded-3xl md:rounded-4xl p-4 sm:p-6 md:p-10 shadow-sm border border-neutral-200"
+            >
+            <p className="text-xs sm:text-sm md:text-base text-neutral-600 mt-1">
+              {currentEventIndex + 1} of {events.length} recommendations
+            </p>
             <div className={`inline-block px-3 sm:px-4 md:px-5 py-1 md:py-2 rounded-full text-xs sm:text-sm md:text-base font-semibold mb-3 sm:mb-4 md:mb-6 ${getMatchColor(currentEvent.matchScore)}`}>
               {currentEvent.matchScore}% Match
             </div>
@@ -283,6 +286,7 @@ export default function Recommendations() {
                 You&apos;re already registered for this event.
               </p>
             )}
+            </div>
           </div>
 
           {/* Map + Directions Panel */}
